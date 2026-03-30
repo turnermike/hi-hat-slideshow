@@ -1,5 +1,6 @@
 import React from 'react';
 import { useProjectStore } from '@/stores/projectStore';
+import { useShallow } from 'zustand/react/shallow';
 import type { AspectRatio } from '@/types';
 
 interface AspectRatioOption {
@@ -27,8 +28,12 @@ const ASPECT_RATIOS: AspectRatioOption[] = [
 ];
 
 export const AspectRatioSelector: React.FC = () => {
-  const aspectRatio = useProjectStore((state) => state.aspectRatio);
-  const setAspectRatio = useProjectStore((state) => state.setAspectRatio);
+  const { aspectRatio, setAspectRatio } = useProjectStore(
+    useShallow((state) => ({
+      aspectRatio: state.aspectRatio,
+      setAspectRatio: state.setAspectRatio,
+    }))
+  );
 
   return (
     <div className="flex flex-col gap-3">

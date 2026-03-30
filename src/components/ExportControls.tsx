@@ -1,25 +1,39 @@
 import React from 'react';
 import { Download, AlertCircle } from 'lucide-react';
 import { useProjectStore } from '@/stores/projectStore';
+import { useShallow } from 'zustand/react/shallow';
 import { estimateFileSize, formatDurationString } from '@/utils/videoExporter';
 
 export const ExportControls: React.FC = () => {
   const [isExporting, setIsExporting] = React.useState(false);
 
-  const project = useProjectStore((state) => ({
-    images: state.images,
-    slideDurations: state.slideDurations,
-    transitionDurations: state.transitionDurations,
-    exportSettings: state.exportSettings,
-  }));
+  const {
+    images,
+    slideDurations,
+    transitionDurations,
+    exportSettings,
+    updateExportSettings,
+    setExporting,
+    exportProgress,
+    setExportProgress,
+    exportError,
+    setExportError,
+  } = useProjectStore(
+    useShallow((state) => ({
+      images: state.images,
+      slideDurations: state.slideDurations,
+      transitionDurations: state.transitionDurations,
+      exportSettings: state.exportSettings,
+      updateExportSettings: state.updateExportSettings,
+      setExporting: state.setExporting,
+      exportProgress: state.exportProgress,
+      setExportProgress: state.setExportProgress,
+      exportError: state.exportError,
+      setExportError: state.setExportError,
+    }))
+  );
 
-  const exportSettings = useProjectStore((state) => state.exportSettings);
-  const updateExportSettings = useProjectStore((state) => state.updateExportSettings);
-  const setExporting = useProjectStore((state) => state.setExporting);
-  const exportProgress = useProjectStore((state) => state.exportProgress);
-  const setExportProgress = useProjectStore((state) => state.setExportProgress);
-  const exportError = useProjectStore((state) => state.exportError);
-  const setExportError = useProjectStore((state) => state.setExportError);
+  const project = { images, slideDurations, transitionDurations, exportSettings };
 
   const videoDuration = project.slideDurations.reduce((a, b) => a + b, 0) + project.transitionDurations.reduce((a, b) => a + b, 0);
 
@@ -42,7 +56,7 @@ export const ExportControls: React.FC = () => {
   const estimatedSize = estimateFileSize(videoDuration, resolution, exportSettings);
 
   const handleExport = async () => {
-    if (project.images.length === 0) {
+    if (images.length === 0) {
       setExportError('Please upload images first');
       return;
     }

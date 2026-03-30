@@ -2,13 +2,18 @@ import React, { useState } from 'react';
 import { Reorder } from 'framer-motion';
 import { X } from 'lucide-react';
 import { useProjectStore } from '@/stores/projectStore';
+import { useShallow } from 'zustand/react/shallow';
 
 export const ImagePreview: React.FC = () => {
-  const images = useProjectStore((state) => state.images);
-  const removeImage = useProjectStore((state) => state.removeImage);
-  const reorderImages = useProjectStore((state) => state.reorderImages);
-  const selectedSlideIndex = useProjectStore((state) => state.selectedSlideIndex);
-  const setSelectedSlideIndex = useProjectStore((state) => state.setSelectedSlideIndex);
+  const { images, removeImage, reorderImages, selectedSlideIndex, setSelectedSlideIndex } = useProjectStore(
+    useShallow((state) => ({
+      images: state.images,
+      removeImage: state.removeImage,
+      reorderImages: state.reorderImages,
+      selectedSlideIndex: state.selectedSlideIndex,
+      setSelectedSlideIndex: state.setSelectedSlideIndex,
+    }))
+  );
 
   const [localImages, setLocalImages] = useState(images);
 

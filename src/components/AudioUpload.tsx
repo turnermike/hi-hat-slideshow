@@ -1,10 +1,15 @@
 import React from 'react';
 import { Music, X } from 'lucide-react';
 import { useProjectStore } from '@/stores/projectStore';
+import { useShallow } from 'zustand/react/shallow';
 
 export const AudioUpload: React.FC = () => {
-  const musicFile = useProjectStore((state) => state.musicFile);
-  const setMusicFile = useProjectStore((state) => state.setMusicFile);
+  const { musicFile, setMusicFile } = useProjectStore(
+    useShallow((state) => ({
+      musicFile: state.musicFile,
+      setMusicFile: state.setMusicFile,
+    }))
+  );
   const [duration, setDuration] = React.useState<number | null>(null);
   const [error, setError] = React.useState<string | null>(null);
 

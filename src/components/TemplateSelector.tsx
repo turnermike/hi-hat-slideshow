@@ -1,5 +1,6 @@
 import React from 'react';
 import { useProjectStore } from '@/stores/projectStore';
+import { useShallow } from 'zustand/react/shallow';
 import type { Template } from '@/types';
 
 const TEMPLATES: Template[] = [
@@ -31,8 +32,12 @@ const TEMPLATES: Template[] = [
 ];
 
 export const TemplateSelector: React.FC = () => {
-  const selectedTemplate = useProjectStore((state) => state.selectedTemplate);
-  const setTemplate = useProjectStore((state) => state.setTemplate);
+  const { selectedTemplate, setTemplate } = useProjectStore(
+    useShallow((state) => ({
+      selectedTemplate: state.selectedTemplate,
+      setTemplate: state.setTemplate,
+    }))
+  );
 
   return (
     <div className="flex flex-col gap-3">

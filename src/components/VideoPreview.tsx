@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { Player } from '@remotion/player';
 import { Play, Pause, Maximize, Volume2, VolumeX } from 'lucide-react';
 import { useProjectStore } from '@/stores/projectStore';
+import { useShallow } from 'zustand/react/shallow';
 import { SlideShow } from './SlideShow';
 import { calculateTotalFrames } from '@/utils/transitions';
 
@@ -11,19 +12,19 @@ export const VideoPreview: React.FC = () => {
   const [isMuted, setIsMuted] = React.useState(false);
   const [progress, setProgress] = React.useState(0);
 
-  const fullProject = useProjectStore((state) => state);
-
-  const project = {
-    images: fullProject.images,
-    transitions: fullProject.transitions,
-    slideDurations: fullProject.slideDurations,
-    transitionDurations: fullProject.transitionDurations,
-    captions: fullProject.captions,
-    musicFile: fullProject.musicFile,
-    exportSettings: fullProject.exportSettings,
-    aspectRatio: fullProject.aspectRatio,
-    selectedTemplate: fullProject.selectedTemplate,
-  };
+  const project = useProjectStore(
+    useShallow((state) => ({
+      images: state.images,
+      transitions: state.transitions,
+      slideDurations: state.slideDurations,
+      transitionDurations: state.transitionDurations,
+      captions: state.captions,
+      musicFile: state.musicFile,
+      exportSettings: state.exportSettings,
+      aspectRatio: state.aspectRatio,
+      selectedTemplate: state.selectedTemplate,
+    }))
+  );
 
   const totalFrames = calculateTotalFrames(project.slideDurations, project.transitionDurations, 30);
   const currentTime = (progress / totalFrames) * (project.slideDurations.reduce((a, b) => a + b, 0) + project.transitionDurations.reduce((a, b) => a + b, 0));

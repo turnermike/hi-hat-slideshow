@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { useProjectStore } from '@/stores/projectStore';
+import { useShallow } from 'zustand/react/shallow';
 import type { ImageItem, TransitionType } from '@/types';
 
 interface SlideThumbnailProps {
@@ -14,16 +15,31 @@ const TRANSITIONS: TransitionType[] = ['fade', 'slide', 'zoom', 'blur', 'wipe', 
 export const SlideThumbnail: React.FC<SlideThumbnailProps> = ({ slideIndex, image }) => {
   const [showAdvanced, setShowAdvanced] = React.useState(false);
 
-  const transitions = useProjectStore((state) => state.transitions);
-  const transitionDurations = useProjectStore((state) => state.transitionDurations);
-  const slideDurations = useProjectStore((state) => state.slideDurations);
-  const captions = useProjectStore((state) => state.captions);
-  const selectedSlideIndex = useProjectStore((state) => state.selectedSlideIndex);
-  const setSelectedSlideIndex = useProjectStore((state) => state.setSelectedSlideIndex);
-  const updateTransition = useProjectStore((state) => state.updateTransition);
-  const updateTransitionDuration = useProjectStore((state) => state.updateTransitionDuration);
-  const updateSlideDuration = useProjectStore((state) => state.updateSlideDuration);
-  const updateCaption = useProjectStore((state) => state.updateCaption);
+  const {
+    transitions,
+    transitionDurations,
+    slideDurations,
+    captions,
+    selectedSlideIndex,
+    setSelectedSlideIndex,
+    updateTransition,
+    updateTransitionDuration,
+    updateSlideDuration,
+    updateCaption,
+  } = useProjectStore(
+    useShallow((state) => ({
+      transitions: state.transitions,
+      transitionDurations: state.transitionDurations,
+      slideDurations: state.slideDurations,
+      captions: state.captions,
+      selectedSlideIndex: state.selectedSlideIndex,
+      setSelectedSlideIndex: state.setSelectedSlideIndex,
+      updateTransition: state.updateTransition,
+      updateTransitionDuration: state.updateTransitionDuration,
+      updateSlideDuration: state.updateSlideDuration,
+      updateCaption: state.updateCaption,
+    }))
+  );
 
   const isSelected = selectedSlideIndex === slideIndex;
   const transitionType = transitions[slideIndex] || 'fade';
