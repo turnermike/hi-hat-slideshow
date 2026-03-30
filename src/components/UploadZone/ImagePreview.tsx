@@ -3,6 +3,7 @@ import { Reorder } from 'framer-motion';
 import { X } from 'lucide-react';
 import { useProjectStore } from '@/stores/projectStore';
 import { useShallow } from 'zustand/react/shallow';
+import { Comment } from '@/components/Comment';
 
 export const ImagePreview: React.FC = () => {
   const { images, removeImage, reorderImages, selectedSlideIndex, setSelectedSlideIndex } = useProjectStore(
@@ -12,7 +13,7 @@ export const ImagePreview: React.FC = () => {
       reorderImages: state.reorderImages,
       selectedSlideIndex: state.selectedSlideIndex,
       setSelectedSlideIndex: state.setSelectedSlideIndex,
-    }))
+    })),
   );
 
   const [localImages, setLocalImages] = useState(images);
@@ -39,30 +40,34 @@ export const ImagePreview: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col gap-3">
-      <h3 className="text-text-primary font-medium">Slides ({images.length})</h3>
-      <div className="overflow-x-auto pb-2">
-        <Reorder.Group axis="x" values={localImages} onReorder={handleReorder} className="flex gap-3">
-          {localImages.map((image, index) => (
-            <Reorder.Item key={image.id} value={image} className={`flex-shrink-0 relative group cursor-move transition-all rounded-lg overflow-hidden ${selectedSlideIndex === index ? 'ring-2 ring-primary' : ''}`}>
-              <img src={image.url} alt={`Slide ${index + 1}`} className="w-24 h-24 object-cover" onClick={() => setSelectedSlideIndex(index)} />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-1">
-                <span className="text-white text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">{index + 1}</span>
-              </div>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  removeImage(image.id);
-                }}
-                className="absolute -top-2 -right-2 bg-error text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                title="Delete slide"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </Reorder.Item>
-          ))}
-        </Reorder.Group>
+    <>
+      <Comment text="Image Preview - Slide Strip Container" />
+      <div className="flex flex-col gap-3">
+        <h3 className="text-text-primary font-medium">Slides ({images.length})</h3>
+        <Comment text="Dynamic height slide thumbnails with wrapping" />
+        <div>
+          <Reorder.Group axis="x" values={localImages} onReorder={handleReorder} className="flex flex-wrap gap-3">
+            {localImages.map((image, index) => (
+              <Reorder.Item key={image.id} value={image} className={`flex-shrink-0 relative group cursor-move transition-all rounded-lg overflow-visible ${selectedSlideIndex === index ? 'ring-2 ring-primary' : ''}`}>
+                <img src={image.url} alt={`Slide ${index + 1}`} className="w-24 h-24 object-cover rounded-lg" onClick={() => setSelectedSlideIndex(index)} />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-1">
+                  <span className="text-white text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">{index + 1}</span>
+                </div>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeImage(image.id);
+                  }}
+                  className="absolute -top-2 -right-2 bg-error text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                  title="Delete slide"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </Reorder.Item>
+            ))}
+          </Reorder.Group>
+        </div>
       </div>
-    </div>
+    </>
   );
 };

@@ -8,7 +8,7 @@ export const AudioUpload: React.FC = () => {
     useShallow((state) => ({
       musicFile: state.musicFile,
       setMusicFile: state.setMusicFile,
-    }))
+    })),
   );
   const [duration, setDuration] = React.useState<number | null>(null);
   const [error, setError] = React.useState<string | null>(null);

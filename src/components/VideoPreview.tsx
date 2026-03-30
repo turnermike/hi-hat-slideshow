@@ -5,6 +5,7 @@ import { useProjectStore } from '@/stores/projectStore';
 import { useShallow } from 'zustand/react/shallow';
 import { SlideShow } from './SlideShow';
 import { calculateTotalFrames } from '@/utils/transitions';
+import { Comment } from '@/components/Comment';
 
 export const VideoPreview: React.FC = () => {
   const playerRef = useRef<any>(null);
@@ -23,7 +24,7 @@ export const VideoPreview: React.FC = () => {
       exportSettings: state.exportSettings,
       aspectRatio: state.aspectRatio,
       selectedTemplate: state.selectedTemplate,
-    }))
+    })),
   );
 
   const totalFrames = calculateTotalFrames(project.slideDurations, project.transitionDurations, 30);
@@ -82,7 +83,7 @@ export const VideoPreview: React.FC = () => {
               height: '100%',
             }}
             inputProps={{
-              project: fullProject,
+              project: project,
             }}
             controls
             autoPlay={false}
@@ -93,7 +94,7 @@ export const VideoPreview: React.FC = () => {
         </div>
       </div>
 
-      {/* Player Controls */}
+      <Comment text="Player Controls" />
       <div className="flex items-center gap-3 bg-dark-surface rounded-lg border border-dark-border p-3">
         <button
           onClick={() => {

@@ -36,7 +36,7 @@ export const TemplateSelector: React.FC = () => {
     useShallow((state) => ({
       selectedTemplate: state.selectedTemplate,
       setTemplate: state.setTemplate,
-    }))
+    })),
   );
 
   return (

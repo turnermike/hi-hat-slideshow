@@ -7,18 +7,7 @@ import { estimateFileSize, formatDurationString } from '@/utils/videoExporter';
 export const ExportControls: React.FC = () => {
   const [isExporting, setIsExporting] = React.useState(false);
 
-  const {
-    images,
-    slideDurations,
-    transitionDurations,
-    exportSettings,
-    updateExportSettings,
-    setExporting,
-    exportProgress,
-    setExportProgress,
-    exportError,
-    setExportError,
-  } = useProjectStore(
+  const { images, slideDurations, transitionDurations, exportSettings, updateExportSettings, setExporting, exportProgress, setExportProgress, exportError, setExportError } = useProjectStore(
     useShallow((state) => ({
       images: state.images,
       slideDurations: state.slideDurations,
@@ -30,7 +19,7 @@ export const ExportControls: React.FC = () => {
       setExportProgress: state.setExportProgress,
       exportError: state.exportError,
       setExportError: state.setExportError,
-    }))
+    })),
   );
 
   const project = { images, slideDurations, transitionDurations, exportSettings };

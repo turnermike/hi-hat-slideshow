@@ -9,13 +9,14 @@ import { AudioUpload } from '@/components/AudioUpload';
 import { ExportControls } from '@/components/ExportControls';
 import { TemplateSelector } from '@/components/TemplateSelector';
 import { AspectRatioSelector } from '@/components/AspectRatioSelector';
+import { Comment } from '@/components/Comment';
 
 function App() {
   const [showHelp, setShowHelp] = React.useState(false);
 
   return (
     <div className="min-h-screen bg-dark-bg text-text-primary">
-      {/* Header */}
+      <Comment text="========== APP HEADER ==========" />
       <header className="border-b border-dark-border">
         <div className="max-w-full mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -30,46 +31,46 @@ function App() {
         </div>
       </header>
 
-      {/* Main content */}
+      <Comment text="========== MAIN CONTENT ==========" />
       <div className="max-w-full mx-auto px-6 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left sidebar - Upload and controls */}
+          <Comment text="========== LEFT SIDEBAR: UPLOAD AND CONTROLS ==========" />
           <div className="lg:col-span-1 flex flex-col gap-6">
-            {/* Upload Zone */}
+            <Comment text="---- Upload Zone ----" />
             <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
               <h2 className="text-text-primary font-medium mb-3">Upload Images</h2>
               <UploadZone />
             </section>
 
-            {/* Image preview strip */}
+            <Comment text="---- Image Preview Strip ----" />
             {true && (
               <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
                 <ImagePreview />
               </section>
             )}
 
-            {/* Template selector */}
+            <Comment text="---- Template Selector ----" />
             <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
               <TemplateSelector />
             </section>
 
-            {/* Aspect ratio selector */}
+            <Comment text="---- Aspect Ratio Selector ----" />
             <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
               <AspectRatioSelector />
             </section>
 
-            {/* Audio Upload */}
+            <Comment text="---- Audio Upload ----" />
             <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
               <AudioUpload />
             </section>
 
-            {/* Export Controls */}
+            <Comment text="---- Export Controls ----" />
             <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
               <ExportControls />
             </section>
           </div>
 
-          {/* Middle column - Video preview */}
+          <Comment text="========== MIDDLE COLUMN: VIDEO PREVIEW ==========" />
           <div className="lg:col-span-1">
             <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
               <h2 className="text-text-primary font-medium mb-3">Preview</h2>
@@ -77,7 +78,7 @@ function App() {
             </section>
           </div>
 
-          {/* Right sidebar - Slide controls */}
+          <Comment text="========== RIGHT SIDEBAR: SLIDE SETTINGS ==========" />
           <div className="lg:col-span-1 flex flex-col gap-6">
             <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
               <h2 className="text-text-primary font-medium mb-3">Slide Settings</h2>
@@ -87,7 +88,7 @@ function App() {
         </div>
       </div>
 
-      {/* Help modal */}
+      <Comment text="========== HELP MODAL ==========" />
       {showHelp && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-dark-surface border border-dark-border rounded-lg p-6 max-w-md">

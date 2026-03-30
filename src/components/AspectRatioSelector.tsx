@@ -32,7 +32,7 @@ export const AspectRatioSelector: React.FC = () => {
     useShallow((state) => ({
       aspectRatio: state.aspectRatio,
       setAspectRatio: state.setAspectRatio,
-    }))
+    })),
   );
 
   return (

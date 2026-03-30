@@ -15,18 +15,7 @@ const TRANSITIONS: TransitionType[] = ['fade', 'slide', 'zoom', 'blur', 'wipe', 
 export const SlideThumbnail: React.FC<SlideThumbnailProps> = ({ slideIndex, image }) => {
   const [showAdvanced, setShowAdvanced] = React.useState(false);
 
-  const {
-    transitions,
-    transitionDurations,
-    slideDurations,
-    captions,
-    selectedSlideIndex,
-    setSelectedSlideIndex,
-    updateTransition,
-    updateTransitionDuration,
-    updateSlideDuration,
-    updateCaption,
-  } = useProjectStore(
+  const { transitions, transitionDurations, slideDurations, captions, selectedSlideIndex, setSelectedSlideIndex, updateTransition, updateTransitionDuration, updateSlideDuration, updateCaption } = useProjectStore(
     useShallow((state) => ({
       transitions: state.transitions,
       transitionDurations: state.transitionDurations,
@@ -38,7 +27,7 @@ export const SlideThumbnail: React.FC<SlideThumbnailProps> = ({ slideIndex, imag
       updateTransitionDuration: state.updateTransitionDuration,
       updateSlideDuration: state.updateSlideDuration,
       updateCaption: state.updateCaption,
-    }))
+    })),
   );
 
   const isSelected = selectedSlideIndex === slideIndex;

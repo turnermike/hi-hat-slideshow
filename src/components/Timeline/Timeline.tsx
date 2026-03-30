@@ -1,6 +1,7 @@
 import React from 'react';
 import { useProjectStore } from '@/stores/projectStore';
 import { SlideThumbnail } from './SlideThumbnail';
+import { Comment } from '@/components/Comment';
 
 export const Timeline: React.FC = () => {
   const images = useProjectStore((state) => state.images);
@@ -14,10 +15,13 @@ export const Timeline: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col gap-3 max-h-96 overflow-y-auto">
-      {images.map((image, index) => (
-        <SlideThumbnail key={image.id} slideIndex={index} image={image} />
-      ))}
-    </div>
+    <>
+      <Comment text="Slide Settings - Timeline Container" />
+      <div className="flex flex-col gap-3">
+        {images.map((image, index) => (
+          <SlideThumbnail key={image.id} slideIndex={index} image={image} />
+        ))}
+      </div>
+    </>
   );
 };
