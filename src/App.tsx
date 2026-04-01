@@ -65,7 +65,7 @@ function App() {
             </section>
 
             <Comment text="---- Export Controls ----" />
-            <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
+            <section className="hidden lg:block bg-dark-surface border border-dark-border rounded-lg p-4">
               <ExportControls />
             </section>
           </div>
@@ -83,6 +83,14 @@ function App() {
             <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
               <h2 className="text-text-primary font-medium mb-3">Preview</h2>
               <VideoPreview />
+            </section>
+          </div>
+
+          <Comment text="========== MOBILE/TABLET BOTTOM: EXPORT CONTROLS ==========" />
+          <div className="lg:hidden">
+            <Comment text="---- Export Controls ----" />
+            <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
+              <ExportControls />
             </section>
           </div>
         </div>
