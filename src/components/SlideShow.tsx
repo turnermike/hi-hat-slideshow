@@ -18,6 +18,7 @@ interface RenderProject {
   slideDurations: number[];
   transitionDurations: number[];
   captions: string[];
+  captionColors: string[];
   musicFile?: File | null;
   musicUrl?: string | null;
 }
@@ -80,7 +81,7 @@ const ImageSlide: React.FC<{ url: string; applyKenBurns: boolean; slideProgress:
 };
 
 export const SlideShow: React.FC<SlideShowProps> = ({ project }) => {
-  const safeProject = project ?? { images: [], transitions: [], slideDurations: [], transitionDurations: [], captions: [], musicFile: null, musicUrl: null };
+  const safeProject = project ?? { images: [], transitions: [], slideDurations: [], transitionDurations: [], captions: [], captionColors: [], musicFile: null, musicUrl: null };
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const hasKenBurns = (index: number) => safeProject.transitions[index] === 'kenburns';
@@ -194,7 +195,7 @@ export const SlideShow: React.FC<SlideShowProps> = ({ project }) => {
           >
             <div
               style={{
-                color: '#fff',
+                color: safeProject.captionColors[activeCaptionIndex] || '#fff',
                 fontSize: 31,
                 fontWeight: 'bold',
                 textAlign: 'center',

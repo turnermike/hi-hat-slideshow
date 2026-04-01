@@ -15,6 +15,7 @@ interface ProjectActions {
   // Slide management
   updateSlideDuration: (index: number, duration: number) => void;
   updateCaption: (index: number, caption: string) => void;
+  updateCaptionColor: (index: number, color: string) => void;
 
   // Audio management
   setMusicFile: (file: File | null) => void;
@@ -59,12 +60,14 @@ export const useProjectStore = create<ProjectState & ProjectActions>((set, get) 
       const newTransitionDurations = [...state.transitionDurations];
       const newSlideDurations = [...state.slideDurations];
       const newCaptions = [...state.captions];
+      const newCaptionColors = [...state.captionColors];
 
       newImages.forEach(() => {
         newTransitions.push('fade');
         newTransitionDurations.push(1);
         newSlideDurations.push(3);
         newCaptions.push('');
+        newCaptionColors.push('#ffffff');
       });
 
       return {
@@ -73,6 +76,7 @@ export const useProjectStore = create<ProjectState & ProjectActions>((set, get) 
         transitionDurations: newTransitionDurations,
         slideDurations: newSlideDurations,
         captions: newCaptions,
+        captionColors: newCaptionColors,
       };
     });
   },
@@ -87,6 +91,7 @@ export const useProjectStore = create<ProjectState & ProjectActions>((set, get) 
       const newTransitionDurations = state.transitionDurations.filter((_, i) => i !== index);
       const newSlideDurations = state.slideDurations.filter((_, i) => i !== index);
       const newCaptions = state.captions.filter((_, i) => i !== index);
+      const newCaptionColors = state.captionColors.filter((_, i) => i !== index);
 
       // Clean up blob URL to prevent memory leak
       URL.revokeObjectURL(state.images[index].url);
@@ -97,6 +102,7 @@ export const useProjectStore = create<ProjectState & ProjectActions>((set, get) 
         transitionDurations: newTransitionDurations,
         slideDurations: newSlideDurations,
         captions: newCaptions,
+        captionColors: newCaptionColors,
         selectedSlideIndex: Math.min(state.selectedSlideIndex, newImages.length - 1) || 0,
       };
     });
@@ -109,6 +115,7 @@ export const useProjectStore = create<ProjectState & ProjectActions>((set, get) 
       const newTransitionDurations = Array.from(state.transitionDurations);
       const newSlideDurations = Array.from(state.slideDurations);
       const newCaptions = Array.from(state.captions);
+      const newCaptionColors = Array.from(state.captionColors);
 
       // Reorder images
       const [removedImage] = newImages.splice(startIndex, 1);
@@ -127,12 +134,16 @@ export const useProjectStore = create<ProjectState & ProjectActions>((set, get) 
       const [removedCaption] = newCaptions.splice(startIndex, 1);
       newCaptions.splice(endIndex, 0, removedCaption);
 
+      const [removedCaptionColor] = newCaptionColors.splice(startIndex, 1);
+      newCaptionColors.splice(endIndex, 0, removedCaptionColor);
+
       return {
         images: newImages,
         transitions: newTransitions,
         transitionDurations: newTransitionDurations,
         slideDurations: newSlideDurations,
         captions: newCaptions,
+        captionColors: newCaptionColors,
       };
     });
   },
@@ -168,6 +179,14 @@ export const useProjectStore = create<ProjectState & ProjectActions>((set, get) 
       const newCaptions = [...state.captions];
       newCaptions[index] = caption;
       return { captions: newCaptions };
+    });
+  },
+
+  updateCaptionColor: (index: number, color: string) => {
+    set((state) => {
+      const newCaptionColors = [...state.captionColors];
+      newCaptionColors[index] = color;
+      return { captionColors: newCaptionColors };
     });
   },
 

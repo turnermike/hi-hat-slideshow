@@ -8,11 +8,12 @@ import type { ExportSettings } from '@/types';
 export const ExportControls: React.FC = () => {
   const [isExporting, setIsExporting] = React.useState(false);
 
-  const { images, transitions, captions, musicFile, slideDurations, transitionDurations, exportSettings, aspectRatio, updateExportSettings, setExporting, exportProgress, setExportProgress, exportError, setExportError } = useProjectStore(
+  const { images, transitions, captions, captionColors, musicFile, slideDurations, transitionDurations, exportSettings, aspectRatio, updateExportSettings, setExporting, exportProgress, setExportProgress, exportError, setExportError } = useProjectStore(
     useShallow((state) => ({
       images: state.images,
       transitions: state.transitions,
       captions: state.captions,
+      captionColors: state.captionColors,
       musicFile: state.musicFile,
       slideDurations: state.slideDurations,
       transitionDurations: state.transitionDurations,
@@ -27,7 +28,7 @@ export const ExportControls: React.FC = () => {
     })),
   );
 
-  const project = { images, transitions, captions, musicFile, slideDurations, transitionDurations, exportSettings, aspectRatio };
+  const project = { images, transitions, captions, captionColors, musicFile, slideDurations, transitionDurations, exportSettings, aspectRatio };
 
   const videoDuration = project.slideDurations.reduce((a, b) => a + b, 0) + project.transitionDurations.reduce((a, b) => a + b, 0);
 
@@ -111,6 +112,7 @@ export const ExportControls: React.FC = () => {
             slideDurations: project.slideDurations,
             transitionDurations: project.transitionDurations,
             captions: project.captions,
+            captionColors: project.captionColors,
             musicUrl,
             exportSettings: project.exportSettings,
             aspectRatio: project.aspectRatio,

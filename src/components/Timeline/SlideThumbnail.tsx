@@ -15,18 +15,20 @@ const TRANSITIONS: TransitionType[] = ['fade', 'slide', 'zoom', 'blur', 'wipe', 
 export const SlideThumbnail: React.FC<SlideThumbnailProps> = ({ slideIndex, image }) => {
   const [showAdvanced, setShowAdvanced] = React.useState(false);
 
-  const { transitions, transitionDurations, slideDurations, captions, selectedSlideIndex, setSelectedSlideIndex, updateTransition, updateTransitionDuration, updateSlideDuration, updateCaption } = useProjectStore(
+  const { transitions, transitionDurations, slideDurations, captions, captionColors, selectedSlideIndex, setSelectedSlideIndex, updateTransition, updateTransitionDuration, updateSlideDuration, updateCaption, updateCaptionColor } = useProjectStore(
     useShallow((state) => ({
       transitions: state.transitions,
       transitionDurations: state.transitionDurations,
       slideDurations: state.slideDurations,
       captions: state.captions,
+      captionColors: state.captionColors,
       selectedSlideIndex: state.selectedSlideIndex,
       setSelectedSlideIndex: state.setSelectedSlideIndex,
       updateTransition: state.updateTransition,
       updateTransitionDuration: state.updateTransitionDuration,
       updateSlideDuration: state.updateSlideDuration,
       updateCaption: state.updateCaption,
+      updateCaptionColor: state.updateCaptionColor,
     })),
   );
 
@@ -35,6 +37,7 @@ export const SlideThumbnail: React.FC<SlideThumbnailProps> = ({ slideIndex, imag
   const slideDuration = slideDurations[slideIndex] || 3;
   const transitionDuration = transitionDurations[slideIndex] || 1;
   const caption = captions[slideIndex] || '';
+  const captionColor = captionColors[slideIndex] || '#ffffff';
 
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className={`p-3 rounded-lg border-2 transition-colors ${isSelected ? 'border-primary bg-primary/5' : 'border-dark-border hover:border-dark-border/50'}`} onClick={() => setSelectedSlideIndex(slideIndex)}>
@@ -76,6 +79,26 @@ export const SlideThumbnail: React.FC<SlideThumbnailProps> = ({ slideIndex, imag
           <div>
             <label className="text-text-secondary text-xs">Caption (optional)</label>
             <input type="text" value={caption} onChange={(e) => updateCaption(slideIndex, e.target.value)} placeholder="Add text overlay..." className="w-full bg-dark-border border border-dark-border rounded px-2 py-1 text-text-primary text-sm placeholder-text-secondary" />
+          </div>
+
+          {/* Caption color picker */}
+          <div>
+            <label className="text-text-secondary text-xs">Caption Color</label>
+            <div className="flex items-center gap-2">
+              <input 
+                type="color" 
+                value={captionColor} 
+                onChange={(e) => updateCaptionColor(slideIndex, e.target.value)}
+                className="w-8 h-8 bg-dark-border border border-dark-border rounded cursor-pointer"
+              />
+              <input 
+                type="text" 
+                value={captionColor} 
+                onChange={(e) => updateCaptionColor(slideIndex, e.target.value)}
+                placeholder="#ffffff"
+                className="flex-1 bg-dark-border border border-dark-border rounded px-2 py-1 text-text-primary text-sm placeholder-text-secondary font-mono"
+              />
+            </div>
           </div>
 
           {/* Advanced controls */}

@@ -13,6 +13,7 @@ export interface ExportPayload {
     slideDurations: number[];
     transitionDurations: number[];
     captions: string[];
+    captionColors: string[];
     musicUrl?: string | null;
     exportSettings: ExportSettings;
     aspectRatio: '16:9' | '9:16' | '1:1';

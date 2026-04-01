@@ -20,6 +20,7 @@ export const VideoPreview: React.FC = () => {
       slideDurations: state.slideDurations,
       transitionDurations: state.transitionDurations,
       captions: state.captions,
+      captionColors: state.captionColors,
       musicFile: state.musicFile,
       exportSettings: state.exportSettings,
       aspectRatio: state.aspectRatio,

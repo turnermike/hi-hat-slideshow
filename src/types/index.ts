@@ -57,6 +57,7 @@ export interface ProjectState {
 
   // Captions and audio
   captions: string[];
+  captionColors: string[];
   musicFile: File | null;
 
   // Export and display
@@ -78,6 +79,7 @@ export const initialProjectState: ProjectState = {
   transitionDurations: [],
   slideDurations: [],
   captions: [],
+  captionColors: [],
   musicFile: null,
   exportSettings: {
     resolution: '1080p',
