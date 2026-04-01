@@ -32,7 +32,7 @@ function App() {
       </header>
 
       <Comment text="========== MAIN CONTENT ==========" />
-      <div className="max-w-full mx-auto px-6 py-6">
+      <div className="max-w-screen-2xl mx-auto px-6 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <Comment text="========== LEFT SIDEBAR: UPLOAD AND CONTROLS ==========" />
           <div className="lg:col-span-1 flex flex-col gap-6">
@@ -70,19 +70,19 @@ function App() {
             </section>
           </div>
 
-          <Comment text="========== MIDDLE COLUMN: VIDEO PREVIEW ==========" />
-          <div className="lg:col-span-1">
-            <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
-              <h2 className="text-text-primary font-medium mb-3">Preview</h2>
-              <VideoPreview />
-            </section>
-          </div>
-
-          <Comment text="========== RIGHT SIDEBAR: SLIDE SETTINGS ==========" />
+          <Comment text="========== MIDDLE COLUMN: SLIDE SETTINGS ==========" />
           <div className="lg:col-span-1 flex flex-col gap-6">
             <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
               <h2 className="text-text-primary font-medium mb-3">Slide Settings</h2>
               <Timeline />
+            </section>
+          </div>
+
+          <Comment text="========== RIGHT COLUMN: VIDEO PREVIEW ==========" />
+          <div className="lg:col-span-1">
+            <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
+              <h2 className="text-text-primary font-medium mb-3">Preview</h2>
+              <VideoPreview />
             </section>
           </div>
         </div>
