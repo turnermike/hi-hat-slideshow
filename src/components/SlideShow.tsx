@@ -197,7 +197,7 @@ export const SlideShow: React.FC<SlideShowProps> = ({ project }) => {
               style={{
                 color: safeProject.captionColors[activeCaptionIndex] || '#fff',
                 fontSize: 31,
-                fontWeight: 'bold',
+                fontWeight: 'normal',
                 textAlign: 'center',
                 maxWidth: '90%',
                 fontFamily: '"Onest", sans-serif',
