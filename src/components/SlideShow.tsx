@@ -65,6 +65,7 @@ const ImageSlide: React.FC<{ url: string; applyKenBurns: boolean; slideProgress:
 export const SlideShow: React.FC<SlideShowProps> = ({ project }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const hasKenBurns = (index: number) => project.transitions[index] === 'kenburns';
 
   if (project.images.length === 0) {
     return (
@@ -115,7 +116,14 @@ export const SlideShow: React.FC<SlideShowProps> = ({ project }) => {
       const fromImage = project.images[currentTransition.imageIndex];
       const toImage = project.images[currentTransition.nextImageIndex];
 
-      return <TransitionWrapper type={project.transitions[currentTransition.imageIndex] || 'fade'} progress={transitionProgress} from={<ImageSlide url={fromImage.url} applyKenBurns={currentTransition.imageIndex > 0} slideProgress={1} />} to={<ImageSlide url={toImage.url} applyKenBurns={true} slideProgress={0} />} />;
+      return (
+        <TransitionWrapper
+          type={project.transitions[currentTransition.imageIndex] || 'fade'}
+          progress={transitionProgress}
+          from={<ImageSlide url={fromImage.url} applyKenBurns={hasKenBurns(currentTransition.imageIndex)} slideProgress={1} />}
+          to={<ImageSlide url={toImage.url} applyKenBurns={hasKenBurns(currentTransition.nextImageIndex)} slideProgress={0} />}
+        />
+      );
     }
 
     // During slide
@@ -123,7 +131,7 @@ export const SlideShow: React.FC<SlideShowProps> = ({ project }) => {
       const slideProgress = (frame - currentSlide.startFrame) / (currentSlide.endFrame - currentSlide.startFrame);
       const image = project.images[currentSlide.imageIndex];
 
-      return <ImageSlide url={image.url} applyKenBurns={project.transitions[currentSlide.imageIndex] === 'kenburns'} slideProgress={slideProgress} />;
+      return <ImageSlide url={image.url} applyKenBurns={hasKenBurns(currentSlide.imageIndex)} slideProgress={slideProgress} />;
     }
 
     // Fallback
