@@ -1,6 +1,6 @@
 import React from 'react';
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, Audio } from 'remotion';
-import type { ProjectState } from '@/types';
+import type { SlideDirection } from '@/types';
 import { Fade } from './Transitions/Fade';
 import { Slide } from './Transitions/Slide';
 import { Zoom } from './Transitions/Zoom';
@@ -9,8 +9,25 @@ import { Wipe } from './Transitions/Wipe';
 import { KenBurns } from './Transitions/KenBurns';
 
 interface SlideShowProps {
-  project: ProjectState;
+  project?: RenderProject;
 }
+
+interface RenderProject {
+  images: Array<{ url: string }>;
+  transitions: string[];
+  slideDurations: number[];
+  transitionDurations: number[];
+  captions: string[];
+  musicFile?: File | null;
+  musicUrl?: string | null;
+}
+
+const safeDirection = (direction?: string): SlideDirection => {
+  if (direction === 'right' || direction === 'up' || direction === 'down') {
+    return direction;
+  }
+  return 'left';
+};
 
 const TransitionWrapper: React.FC<{
   type: string;
@@ -23,13 +40,13 @@ const TransitionWrapper: React.FC<{
 
   switch (type) {
     case 'slide':
-      return <Slide from={from} to={to} progress={clampedProgress} direction={direction as any} />;
+      return <Slide from={from} to={to} progress={clampedProgress} direction={safeDirection(direction)} />;
     case 'zoom':
       return <Zoom from={from} to={to} progress={clampedProgress} />;
     case 'blur':
       return <Blur from={from} to={to} progress={clampedProgress} />;
     case 'wipe':
-      return <Wipe from={from} to={to} progress={clampedProgress} direction={direction as any} />;
+      return <Wipe from={from} to={to} progress={clampedProgress} direction={safeDirection(direction)} />;
     case 'fade':
     default:
       return <Fade from={from} to={to} progress={clampedProgress} />;
@@ -63,11 +80,26 @@ const ImageSlide: React.FC<{ url: string; applyKenBurns: boolean; slideProgress:
 };
 
 export const SlideShow: React.FC<SlideShowProps> = ({ project }) => {
+  const safeProject = project ?? { images: [], transitions: [], slideDurations: [], transitionDurations: [], captions: [], musicFile: null, musicUrl: null };
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const hasKenBurns = (index: number) => project.transitions[index] === 'kenburns';
+  const hasKenBurns = (index: number) => safeProject.transitions[index] === 'kenburns';
+  const audioUrl = React.useMemo(() => {
+    if (safeProject.musicUrl) return safeProject.musicUrl;
+    if (typeof File !== 'undefined' && safeProject.musicFile instanceof File) {
+      return URL.createObjectURL(safeProject.musicFile);
+    }
+    return null;
+  }, [safeProject.musicFile, safeProject.musicUrl]);
 
-  if (project.images.length === 0) {
+  React.useEffect(() => {
+    if (!audioUrl || safeProject.musicUrl) return;
+    return () => {
+      URL.revokeObjectURL(audioUrl);
+    };
+  }, [audioUrl, safeProject.musicUrl]);
+
+  if (safeProject.images.length === 0) {
     return (
       <AbsoluteFill style={{ background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ color: '#fff', fontSize: 24 }}>No images to display</div>
@@ -86,9 +118,9 @@ export const SlideShow: React.FC<SlideShowProps> = ({ project }) => {
   }[] = [];
 
   // Calculate frame ranges for all slides
-  for (let i = 0; i < project.images.length; i++) {
-    const slideFrames = Math.round(project.slideDurations[i] * fps);
-    const transitionFrames = i < project.transitionDurations.length ? Math.round(project.transitionDurations[i] * fps) : 0;
+  for (let i = 0; i < safeProject.images.length; i++) {
+    const slideFrames = Math.round(safeProject.slideDurations[i] * fps);
+    const transitionFrames = i < safeProject.transitionDurations.length ? Math.round(safeProject.transitionDurations[i] * fps) : 0;
 
     slides.push({
       startFrame: currentFrame,
@@ -103,22 +135,22 @@ export const SlideShow: React.FC<SlideShowProps> = ({ project }) => {
   }
 
   // Find current slide and transition
-  let currentSlide = slides.find((s) => frame >= s.startFrame && frame < s.endFrame);
-  let currentTransition = slides.find((s) => s.transitionStart !== undefined && s.transitionEnd !== undefined && frame >= s.transitionStart && frame < s.transitionEnd);
+  const currentSlide = slides.find((s) => frame >= s.startFrame && frame < s.endFrame);
+  const currentTransition = slides.find((s) => s.transitionStart !== undefined && s.transitionEnd !== undefined && frame >= s.transitionStart && frame < s.transitionEnd);
 
   // Determine which content is showing
   const renderContent = () => {
     // During transition
-    if (currentTransition && currentTransition.nextImageIndex !== undefined && currentTransition.nextImageIndex < project.images.length) {
+    if (currentTransition && currentTransition.nextImageIndex !== undefined && currentTransition.nextImageIndex < safeProject.images.length) {
       const transitionStart = currentTransition.transitionStart || 0;
       const transitionEnd = currentTransition.transitionEnd || transitionStart + 1;
       const transitionProgress = (frame - transitionStart) / (transitionEnd - transitionStart);
-      const fromImage = project.images[currentTransition.imageIndex];
-      const toImage = project.images[currentTransition.nextImageIndex];
+      const fromImage = safeProject.images[currentTransition.imageIndex];
+      const toImage = safeProject.images[currentTransition.nextImageIndex];
 
       return (
         <TransitionWrapper
-          type={project.transitions[currentTransition.imageIndex] || 'fade'}
+          type={safeProject.transitions[currentTransition.imageIndex] || 'fade'}
           progress={transitionProgress}
           from={<ImageSlide url={fromImage.url} applyKenBurns={hasKenBurns(currentTransition.imageIndex)} slideProgress={1} />}
           to={<ImageSlide url={toImage.url} applyKenBurns={hasKenBurns(currentTransition.nextImageIndex)} slideProgress={0} />}
@@ -129,7 +161,7 @@ export const SlideShow: React.FC<SlideShowProps> = ({ project }) => {
     // During slide
     if (currentSlide) {
       const slideProgress = (frame - currentSlide.startFrame) / (currentSlide.endFrame - currentSlide.startFrame);
-      const image = project.images[currentSlide.imageIndex];
+      const image = safeProject.images[currentSlide.imageIndex];
 
       return <ImageSlide url={image.url} applyKenBurns={hasKenBurns(currentSlide.imageIndex)} slideProgress={slideProgress} />;
     }
@@ -143,32 +175,39 @@ export const SlideShow: React.FC<SlideShowProps> = ({ project }) => {
       {renderContent()}
 
       {/* Captions */}
-      {currentSlide && project.captions[currentSlide.imageIndex] && (
-        <AbsoluteFill
-          style={{
-            display: 'flex',
-            alignItems: 'flex-end',
-            justifyContent: 'center',
-            padding: '40px',
-            background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)',
-          }}
-        >
-          <div
+      {(() => {
+        const activeCaptionIndex = currentSlide?.imageIndex ?? currentTransition?.imageIndex;
+        if (activeCaptionIndex === undefined || !safeProject.captions[activeCaptionIndex]) {
+          return null;
+        }
+
+        return (
+          <AbsoluteFill
             style={{
-              color: '#fff',
-              fontSize: 28,
-              fontWeight: 'bold',
-              textAlign: 'center',
-              maxWidth: '90%',
+              display: 'flex',
+              alignItems: 'flex-end',
+              justifyContent: 'center',
+              padding: '40px',
+              background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)',
             }}
           >
-            {project.captions[currentSlide.imageIndex]}
-          </div>
-        </AbsoluteFill>
-      )}
+            <div
+              style={{
+                color: '#fff',
+                fontSize: 28,
+                fontWeight: 'bold',
+                textAlign: 'center',
+                maxWidth: '90%',
+              }}
+            >
+              {safeProject.captions[activeCaptionIndex]}
+            </div>
+          </AbsoluteFill>
+        );
+      })()}
 
       {/* Audio */}
-      {project.musicFile && <Audio src={URL.createObjectURL(project.musicFile)} volume={1} />}
+      {audioUrl && <Audio src={audioUrl} volume={1} />}
     </AbsoluteFill>
   );
 };

@@ -60,14 +60,11 @@ export const useProjectStore = create<ProjectState & ProjectActions>((set, get) 
       const newSlideDurations = [...state.slideDurations];
       const newCaptions = [...state.captions];
 
-      newImages.forEach((_, i) => {
-        const index = state.images.length + i;
-        if (index < newImages.length) {
-          newTransitions.push('fade');
-          newTransitionDurations.push(1);
-          newSlideDurations.push(3);
-          newCaptions.push('');
-        }
+      newImages.forEach(() => {
+        newTransitions.push('fade');
+        newTransitionDurations.push(1);
+        newSlideDurations.push(3);
+        newCaptions.push('');
       });
 
       return {

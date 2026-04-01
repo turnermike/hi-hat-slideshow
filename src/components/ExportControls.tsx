@@ -2,17 +2,22 @@ import React from 'react';
 import { Download, AlertCircle } from 'lucide-react';
 import { useProjectStore } from '@/stores/projectStore';
 import { useShallow } from 'zustand/react/shallow';
-import { estimateFileSize, formatDurationString } from '@/utils/videoExporter';
+import { estimateFileSize, formatDurationString, getCodecInfo } from '@/utils/videoExporter';
+import type { ExportSettings } from '@/types';
 
 export const ExportControls: React.FC = () => {
   const [isExporting, setIsExporting] = React.useState(false);
 
-  const { images, slideDurations, transitionDurations, exportSettings, updateExportSettings, setExporting, exportProgress, setExportProgress, exportError, setExportError } = useProjectStore(
+  const { images, transitions, captions, musicFile, slideDurations, transitionDurations, exportSettings, aspectRatio, updateExportSettings, setExporting, exportProgress, setExportProgress, exportError, setExportError } = useProjectStore(
     useShallow((state) => ({
       images: state.images,
+      transitions: state.transitions,
+      captions: state.captions,
+      musicFile: state.musicFile,
       slideDurations: state.slideDurations,
       transitionDurations: state.transitionDurations,
       exportSettings: state.exportSettings,
+      aspectRatio: state.aspectRatio,
       updateExportSettings: state.updateExportSettings,
       setExporting: state.setExporting,
       exportProgress: state.exportProgress,
@@ -22,7 +27,7 @@ export const ExportControls: React.FC = () => {
     })),
   );
 
-  const project = { images, slideDurations, transitionDurations, exportSettings };
+  const project = { images, transitions, captions, musicFile, slideDurations, transitionDurations, exportSettings, aspectRatio };
 
   const videoDuration = project.slideDurations.reduce((a, b) => a + b, 0) + project.transitionDurations.reduce((a, b) => a + b, 0);
 
@@ -44,6 +49,37 @@ export const ExportControls: React.FC = () => {
   const resolution = getResolution();
   const estimatedSize = estimateFileSize(videoDuration, resolution, exportSettings);
 
+  const toDataUrl = async (url: string) => {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = () => reject(new Error('Failed to read media data'));
+      reader.readAsDataURL(blob);
+    });
+  };
+
+  const fileToDataUrl = async (file: File) => {
+    return await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = () => reject(new Error('Failed to read uploaded file'));
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const downloadBlob = (blob: Blob, filename: string) => {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   const handleExport = async () => {
     if (images.length === 0) {
       setExportError('Please upload images first');
@@ -56,24 +92,42 @@ export const ExportControls: React.FC = () => {
     setExportError(null);
 
     try {
-      // Simulate export progress for now
-      // In real implementation, this would use Remotion's renderMedia
-      for (let i = 0; i <= 100; i += 10) {
-        setExportProgress(i);
-        await new Promise((resolve) => setTimeout(resolve, 200));
+      setExportProgress(10);
+      const imageDataUrls = await Promise.all(project.images.map((image) => toDataUrl(image.url)));
+      const musicUrl = project.musicFile ? await fileToDataUrl(project.musicFile) : null;
+
+      setExportProgress(35);
+      const response = await fetch('/api/export', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          project: {
+            images: project.images.map((image, index) => ({
+              id: image.id,
+              url: imageDataUrls[index],
+              order: image.order,
+            })),
+            transitions: project.transitions,
+            slideDurations: project.slideDurations,
+            transitionDurations: project.transitionDurations,
+            captions: project.captions,
+            musicUrl,
+            exportSettings: project.exportSettings,
+            aspectRatio: project.aspectRatio,
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        const body = await response.json().catch(() => ({ error: 'Video export failed' }));
+        throw new Error(body.error || 'Video export failed');
       }
 
-      // Create download link
-      const mockBlob = new Blob(['Mock video data'], { type: 'video/mp4' });
-      const url = URL.createObjectURL(mockBlob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `portfolio-video-${Date.now()}.mp4`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-
+      setExportProgress(90);
+      const codecInfo = getCodecInfo(project.exportSettings.format);
+      const blob = await response.blob();
+      const filename = `portfolio-video-${Date.now()}.${codecInfo.container}`;
+      downloadBlob(new Blob([blob], { type: codecInfo.mimeType }), filename);
       setExportProgress(100);
     } catch (error) {
       setExportError(error instanceof Error ? error.message : 'Export failed');
@@ -92,7 +146,7 @@ export const ExportControls: React.FC = () => {
         {/* Resolution */}
         <div>
           <label className="text-text-secondary text-xs block mb-1">Resolution</label>
-          <select value={exportSettings.resolution} onChange={(e) => updateExportSettings({ resolution: e.target.value as any })} disabled={isExporting} className="w-full bg-dark-border border border-dark-border rounded px-2 py-1.5 text-text-primary text-sm disabled:opacity-50">
+          <select value={exportSettings.resolution} onChange={(e) => updateExportSettings({ resolution: e.target.value as ExportSettings['resolution'] })} disabled={isExporting} className="w-full bg-dark-border border border-dark-border rounded px-2 py-1.5 text-text-primary text-sm disabled:opacity-50">
             <option value="720p">720p (1280×720)</option>
             <option value="1080p">1080p (1920×1080)</option>
             <option value="4k">4K (3840×2160)</option>
