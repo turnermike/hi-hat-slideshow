@@ -185,19 +185,21 @@ export const SlideShow: React.FC<SlideShowProps> = ({ project }) => {
           <AbsoluteFill
             style={{
               display: 'flex',
-              alignItems: 'flex-end',
-              justifyContent: 'center',
-              padding: '40px',
+              flexDirection: 'column',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              paddingBottom: '80px',
               background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)',
             }}
           >
             <div
               style={{
                 color: '#fff',
-                fontSize: 28,
+                fontSize: 31,
                 fontWeight: 'bold',
                 textAlign: 'center',
                 maxWidth: '90%',
+                fontFamily: '"Onest", sans-serif',
               }}
             >
               {safeProject.captions[activeCaptionIndex]}
