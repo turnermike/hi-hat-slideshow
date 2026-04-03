@@ -9,6 +9,8 @@ import { AudioUpload } from '@/components/AudioUpload';
 import { ExportControls } from '@/components/ExportControls';
 import { AspectRatioSelector } from '@/components/AspectRatioSelector';
 import { Comment } from '@/components/Comment';
+import { Footer } from '@/components/Footer';
+import hiHatLogo from '@/assets/hi-hat-logo-transparent.png';
 
 function App() {
   const [showHelp, setShowHelp] = React.useState(false);
@@ -16,22 +18,28 @@ function App() {
   return (
     <div className="min-h-screen bg-dark-bg text-text-primary">
       <Comment text="========== APP HEADER ==========" />
-      <header className="border-b border-dark-border">
-        <div className="max-w-full mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold">V</span>
+      <header>
+        <div className="inner-wrapper mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <img src={hiHatLogo} alt="Hi-hat Logo" className="w-12 h-12" />
+              <h1 className="text-2xl font-bold">Hi-hat Slideshow Video Generator</h1>
             </div>
-            <h1 className="text-2xl font-bold">Portfolio Video Creator</h1>
+            <button onClick={() => setShowHelp(!showHelp)} className="p-2 hover:bg-dark-border rounded transition-colors" title="Help">
+              <HelpCircle className="w-6 h-6 text-text-secondary" />
+            </button>
           </div>
-          <button onClick={() => setShowHelp(!showHelp)} className="p-2 hover:bg-dark-border rounded transition-colors" title="Help">
-            <HelpCircle className="w-6 h-6 text-text-secondary" />
-          </button>
+          <p className="text-text-secondary text-left pb-4">
+            Easily create customized slideshow videos by uploading images, adding captions, and choosing from six dynamic transitions. Adjust slide durations, select from three design templates, and upload background music to enhance your video. With support for multiple aspect ratios and export options in up to 4K resolution, you can preview your slideshow in real-time before downloading.
+          </p>
+          <p className="text-text-secondary text-left pb-4">
+            Brought to you by: <a href="https://hi-hat.consulting" target="_blank" rel="noopener noreferrer" className="text-text-primary hover:text-text-secondary transition-colors">Hi-hat Consulting - www.hi-hatconsulting.com</a>
+          </p>
         </div>
       </header>
 
       <Comment text="========== MAIN CONTENT ==========" />
-      <div className="max-w-screen-2xl mx-auto px-6 py-6">
+      <div className="main-content max-w-screen-2xl mx-auto px-6 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <Comment text="========== LEFT SIDEBAR: UPLOAD AND CONTROLS ==========" />
           <div className="lg:col-span-1 flex flex-col gap-6">
@@ -118,6 +126,8 @@ function App() {
           </div>
         </div>
       )}
+      
+      <Footer />
     </div>
   );
 }

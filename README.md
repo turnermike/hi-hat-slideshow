@@ -15,7 +15,6 @@ A professional portfolio video slideshow application built with React, TypeScrip
   - Scale
 - **Captions**: Add text overlays to each slide
 - **Music**: Upload background audio for your slideshow
-- **Templates**: 3 pre-built design templates (Minimal, Bold, Elegant)
 - **Aspect Ratios**: Support for 16:9, 9:16, and 1:1 formats
 - **Export**: Multiple resolution options (720p, 1080p, 4K) in MP4 format
 - **Live Preview**: Real-time preview of your slideshow composition
@@ -147,7 +146,6 @@ src/
    - Add captions and select transition type
 4. **Add Audio**: Upload an MP3 or WAV file as background music
 5. **Preview**: Click "Preview Slideshow" to see the composition
-6. **Select Template**: Choose from Minimal, Bold, or Elegant designs
 7. **Set Aspect Ratio**: Choose 16:9, 9:16, or 1:1 format
 8. **Export**: Select resolution and click "Export Slideshow" to generate video
 
