@@ -215,29 +215,41 @@ npm run test -- --clearCache
 
 ## 🚀 Deployment
 
+### Production Deployment
+
+This project uses a branch-based deployment strategy with Vercel. Only pushes to the `deploy-production` branch will trigger automatic deployments.
+
+**🌐 Live Site:** https://hi-hat-slideshow.vercel.app
+
+### Deployment Workflow
+
+1. **Development**: Work on the `dev` branch
+2. **Ready for Production**: Merge changes to `deploy-production`
+3. **Auto-Deploy**: Vercel automatically deploys when `deploy-production` is pushed
+
+```bash
+# Deploy to production
+git checkout deploy-production
+git merge dev  # Merge your changes
+git push origin deploy-production  # Triggers Vercel deployment
+```
+
 ### Build for Production
 
 ```bash
 npm run build
 ```
 
-The built files will be in the `dist/` directory, ready for deployment to any static hosting service.
+The built files will be in the `dist/` directory, ready for deployment.
 
-### Deploy to Vercel
+### Vercel Configuration
 
-```bash
-npm install -g vercel
-vercel --prod
-```
+The project is configured to only deploy from the `deploy-production` branch. Other branches (`main`, `dev`) will not trigger deployments.
 
-### Deploy to Netlify
-
-```bash
-# Build the project
-npm run build
-
-# Deploy the dist folder to Netlify
-```
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+- **Node Version**: 18+
+- **Framework**: Vite + React
 
 ## 🤝 Contributing
 
