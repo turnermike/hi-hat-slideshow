@@ -7,7 +7,6 @@ import { VideoPreview } from '@/components/VideoPreview';
 import { Timeline } from '@/components/Timeline/Timeline';
 import { AudioUpload } from '@/components/AudioUpload';
 import { ExportControls } from '@/components/ExportControls';
-import { TemplateSelector } from '@/components/TemplateSelector';
 import { AspectRatioSelector } from '@/components/AspectRatioSelector';
 import { Comment } from '@/components/Comment';
 
@@ -48,11 +47,6 @@ function App() {
                 <ImagePreview />
               </section>
             )}
-
-            <Comment text="---- Template Selector ----" />
-            <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
-              <TemplateSelector />
-            </section>
 
             <Comment text="---- Aspect Ratio Selector ----" />
             <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
