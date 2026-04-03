@@ -15,6 +15,7 @@ import hiHatLogo from '@/assets/hi-hat-logo-transparent.png';
 function App() {
   const [showHelp, setShowHelp] = React.useState(false);
 
+  //
   return (
     <div className="min-h-screen bg-dark-bg text-text-primary">
       <Comment text="========== APP HEADER ==========" />
