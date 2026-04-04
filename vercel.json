@@ -3,6 +3,12 @@
   "outputDirectory": "dist",
   "installCommand": "npm install",
   "framework": "vite",
+  "functions": {
+    "api/export/route.ts": {
+      "runtime": "nodejs18.x",
+      "maxDuration": 300
+    }
+  },
   "git": {
     "deploymentEnabled": {
       "deploy-production": true,
