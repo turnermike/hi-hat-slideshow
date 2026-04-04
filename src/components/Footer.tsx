@@ -1,6 +1,6 @@
 import React from 'react';
 import hiHatLogo from '@/assets/hi-hat-logo-transparent.png';
-// 
+
 export const Footer: React.FC = () => {
   return (
     <footer className="pt-24 pb-12 border-t border-dark-border bg-dark-surface text-text-primary">
