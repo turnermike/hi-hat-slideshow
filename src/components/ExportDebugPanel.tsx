@@ -12,14 +12,21 @@ export const ExportDebugPanel: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [logs, setLogs] = useState<DebugLog[]>([]);
 
+  console.log('ExportDebugPanel rendered, isOpen:', isOpen);
+  console.log('Current logs count:', logs.length);
+
   const addLog = (level: DebugLog['level'], message: string, details?: any) => {
+    console.log('Adding log:', level, message);
     const newLog: DebugLog = {
       timestamp: new Date().toLocaleTimeString(),
       level,
       message,
       details
     };
-    setLogs(prev => [...prev, newLog]);
+    setLogs(prev => {
+      console.log('Updating logs, new count:', prev.length + 1);
+      return [...prev, newLog];
+    });
   };
 
   const testExport = async () => {
@@ -134,6 +141,11 @@ export const ExportDebugPanel: React.FC = () => {
           </div>
 
           <div className="space-y-2 max-h-60 overflow-y-auto">
+            {logs.length === 0 && (
+              <div className="p-2 text-gray-500 text-sm">
+                No logs yet. Click "Test Export" to start.
+              </div>
+            )}
             {logs.map((log, index) => (
               <div
                 key={index}
