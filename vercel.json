@@ -4,8 +4,8 @@
   "installCommand": "npm install",
   "framework": "vite",
   "functions": {
-    "api/export.js": {
-      "maxDuration": 300
+    "api/test.js": {
+      "maxDuration": 10
     }
   },
   "git": {

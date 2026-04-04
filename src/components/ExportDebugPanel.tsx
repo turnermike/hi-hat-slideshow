@@ -29,6 +29,33 @@ export const ExportDebugPanel: React.FC = () => {
     });
   };
 
+  const testSimpleEndpoint = async () => {
+    setLogs([]);
+    addLog('info', 'Testing simple endpoint...');
+    
+    try {
+      addLog('info', 'Sending request to /api/test...');
+      const response = await fetch('/api/test', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ test: 'data' })
+      });
+
+      addLog('info', `Response status: ${response.status}`);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        addLog('error', `Simple test failed: ${response.status} ${response.statusText}`, errorText);
+        return;
+      }
+
+      const result = await response.json();
+      addLog('success', 'Simple test successful!', result);
+    } catch (error) {
+      addLog('error', 'Simple test error', error);
+    }
+  };
+
   const testExport = async () => {
     setLogs([]);
     addLog('info', 'Starting video export test...');
@@ -132,6 +159,12 @@ export const ExportDebugPanel: React.FC = () => {
           <div className="space-y-3">
             <div className="flex gap-2">
               <button
+                onClick={testSimpleEndpoint}
+                className="px-3 py-2 bg-green-500 text-white rounded hover:bg-green-600 text-sm"
+              >
+                Test Simple API
+              </button>
+              <button
                 onClick={testExport}
                 className="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
               >
@@ -148,7 +181,7 @@ export const ExportDebugPanel: React.FC = () => {
             <div className="space-y-2 max-h-60 overflow-y-auto">
               {logs.length === 0 && (
                 <div className="p-2 text-gray-500 text-sm">
-                  No logs yet. Click "Test Export" to start.
+                  No logs yet. Click "Test Simple API" first to verify Vercel functions work.
                 </div>
               )}
               {logs.map((log, index) => (
