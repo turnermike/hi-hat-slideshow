@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AlertCircle, CheckCircle, X, Info, Download } from 'lucide-react';
+import { AlertCircle, CheckCircle, X, Info, Download, Bug } from 'lucide-react';
 
 interface DebugLog {
   timestamp: string;
@@ -139,66 +139,77 @@ export const ExportDebugPanel: React.FC = () => {
 
   return (
     <>
-      {/* Always visible test */}
-      <div className="fixed top-4 right-4 bg-yellow-100 border border-yellow-300 rounded p-2 text-xs z-40">
-        DEBUG PANEL ACTIVE
+      {/* Always visible indicator - more prominent */}
+      <div className="fixed top-4 right-4 bg-red-500 text-white border-2 border-red-700 rounded-lg p-3 text-sm font-bold z-50 shadow-lg">
+        🐛 DEBUG PANEL ACTIVE
       </div>
       
-      <div className="fixed bottom-4 right-4 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-4 w-96 max-h-96">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="font-semibold text-gray-800">Export Debug Panel</h3>
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="p-1 hover:bg-gray-100 rounded"
-          >
-            {isOpen ? <X className="w-4 h-4" /> : <Download className="w-4 h-4" />}
-          </button>
-        </div>
+      {/* Debug panel trigger button - always visible */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="fixed bottom-4 right-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg p-3 shadow-lg z-50 transition-colors"
+        title="Open Debug Panel"
+      >
+        <Bug className="w-6 h-6" />
+      </button>
 
-        {isOpen && (
-          <div className="space-y-3">
-            <div className="flex gap-2">
+      {/* Debug panel content */}
+      {isOpen && (
+        <div className="fixed bottom-20 right-4 w-96 max-h-96 bg-white border-2 border-gray-300 rounded-lg shadow-xl z-50">
+          <div className="flex items-center justify-between p-4 border-b border-gray-200">
+            <h3 className="font-bold text-gray-800">🔧 Export Debug Panel</h3>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="p-1 hover:bg-gray-100 rounded transition-colors"
+              title="Close"
+            >
+              <X className="w-5 h-5 text-gray-600" />
+            </button>
+          </div>
+
+          <div className="p-4 space-y-3">
+            <div className="flex flex-wrap gap-2">
               <button
                 onClick={testSimpleEndpoint}
-                className="px-3 py-2 bg-green-500 text-white rounded hover:bg-green-600 text-sm"
+                className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium transition-colors"
               >
-                Test Simple API
+                🟢 Test Simple API
               </button>
               <button
                 onClick={testExport}
-                className="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
+                className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors"
               >
-                Test Export
+                🔵 Test Export
               </button>
               <button
                 onClick={clearLogs}
-                className="px-3 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 text-sm"
+                className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors"
               >
-                Clear Logs
+                🗑️ Clear Logs
               </button>
             </div>
 
-            <div className="space-y-2 max-h-60 overflow-y-auto">
+            <div className="space-y-2 max-h-60 overflow-y-auto border border-gray-200 rounded-lg p-3 bg-gray-50">
               {logs.length === 0 && (
-                <div className="p-2 text-gray-500 text-sm">
-                  No logs yet. Click "Test Simple API" first to verify Vercel functions work.
+                <div className="p-3 text-gray-600 text-sm bg-white rounded border border-gray-200">
+                  📝 No logs yet. Click "Test Simple API" first to verify Vercel functions work.
                 </div>
               )}
               {logs.map((log, index) => (
                 <div
                   key={index}
-                  className={`p-2 rounded border ${getLogColor(log.level)}`}
+                  className={`p-3 rounded-lg border ${getLogColor(log.level)}`}
                 >
-                  <div className="flex items-center gap-2 mb-1">
+                  <div className="flex items-center gap-2 mb-2">
                     {getLogIcon(log.level)}
-                    <span className="font-medium text-sm">{log.level.toUpperCase()}</span>
+                    <span className="font-bold text-sm">{log.level.toUpperCase()}</span>
                     <span className="text-xs text-gray-500">{log.timestamp}</span>
                   </div>
-                  <div className="text-sm">{log.message}</div>
+                  <div className="text-sm font-medium">{log.message}</div>
                   {log.details && (
-                    <details className="mt-1">
-                      <summary className="text-xs text-gray-600 cursor-pointer">Details</summary>
-                      <pre className="text-xs bg-gray-50 p-2 mt-1 rounded overflow-x-auto">
+                    <details className="mt-2">
+                      <summary className="text-xs cursor-pointer hover:text-gray-700">📋 View Details</summary>
+                      <pre className="text-xs bg-white p-2 mt-1 rounded border border-gray-300 overflow-x-auto">
                         {JSON.stringify(log.details, null, 2)}
                       </pre>
                     </details>
@@ -207,8 +218,8 @@ export const ExportDebugPanel: React.FC = () => {
               ))}
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </>
   );
 };
