@@ -29,6 +29,33 @@ export const ExportDebugPanel: React.FC = () => {
     });
   };
 
+  const testEdgeRuntime = async () => {
+    setLogs([]);
+    addLog('info', 'Testing Edge Runtime endpoint...');
+    
+    try {
+      addLog('info', 'Sending request to /api/edge...');
+      const response = await fetch('/api/edge', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ test: 'edge' })
+      });
+
+      addLog('info', `Response status: ${response.status}`);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        addLog('error', `Edge test failed: ${response.status} ${response.statusText}`, errorText);
+        return;
+      }
+
+      const result = await response.json();
+      addLog('success', 'Edge runtime test successful!', result);
+    } catch (error) {
+      addLog('error', 'Edge runtime test error', error);
+    }
+  };
+
   const testUltraSimple = async () => {
     setLogs([]);
     addLog('info', 'Testing ultra-simple endpoint...');
@@ -197,6 +224,12 @@ export const ExportDebugPanel: React.FC = () => {
           <div className="p-4 space-y-3">
             <div className="flex flex-wrap gap-2">
               <button
+                onClick={testEdgeRuntime}
+                className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors"
+              >
+                🟠 Edge Runtime
+              </button>
+              <button
                 onClick={testUltraSimple}
                 className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium transition-colors"
               >
@@ -225,7 +258,7 @@ export const ExportDebugPanel: React.FC = () => {
             <div className="space-y-2 max-h-60 overflow-y-auto border border-gray-200 rounded-lg p-3 bg-gray-50">
               {logs.length === 0 && (
                 <div className="p-3 text-gray-600 text-sm bg-white rounded border border-gray-200">
-                  📝 No logs yet. Start with "🟣 Ultra Simple" test.
+                  📝 No logs yet. Start with "🟠 Edge Runtime" test.
                 </div>
               )}
               {logs.map((log, index) => (

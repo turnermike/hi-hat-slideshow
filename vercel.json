@@ -4,7 +4,7 @@
   "installCommand": "npm install",
   "framework": "vite",
   "functions": {
-    "api/simple.js": {
+    "api/edge.js": {
       "maxDuration": 10
     }
   },
