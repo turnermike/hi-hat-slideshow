@@ -1,11 +1,6 @@
 import { renderProjectVideo } from '../../src/server/exportVideo';
 import type { ExportPayload } from '../../src/server/exportVideo';
 
-export const config = {
-  runtime: 'nodejs18.x',
-  maxDuration: 300, // 5 minutes for video processing
-};
-
 export async function POST(request: Request) {
   try {
     const payload: ExportPayload = await request.json();
