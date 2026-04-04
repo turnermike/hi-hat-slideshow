@@ -10,6 +10,7 @@ import { ExportControls } from '@/components/ExportControls';
 import { AspectRatioSelector } from '@/components/AspectRatioSelector';
 import { Comment } from '@/components/Comment';
 import { Footer } from '@/components/Footer';
+import { ExportDebugPanel } from '@/components/ExportDebugPanel';
 import hiHatLogo from '@/assets/hi-hat-logo-transparent.png';
 
 function App() {
@@ -127,6 +128,9 @@ function App() {
           </div>
         </div>
       )}
+      
+      <Comment text="========== DEBUG PANEL ==========" />
+      <ExportDebugPanel />
       
       <Footer />
     </div>
