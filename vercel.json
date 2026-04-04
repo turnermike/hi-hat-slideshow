@@ -3,10 +3,6 @@
   "outputDirectory": "dist",
   "installCommand": "npm install",
   "framework": "vite",
-  "functions": {
-    "api/export.js": {},
-    "api/edge.js": {}
-  },
   "git": {
     "deploymentEnabled": {
       "deploy-production": true,
