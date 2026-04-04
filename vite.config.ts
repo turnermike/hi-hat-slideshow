@@ -3,7 +3,6 @@ import type { Connect, PluginOption, PreviewServer } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import { renderProjectVideo } from './src/server/exportVideo';
 
 const exportApiPlugin = (): PluginOption => {
   const registerRoute = (middlewares: Connect.Server) => {
@@ -23,6 +22,9 @@ const exportApiPlugin = (): PluginOption => {
 
         const rawBody = Buffer.concat(chunks).toString('utf-8');
         const payload = JSON.parse(rawBody);
+        
+        // Dynamic import for server-side functionality
+        const { renderProjectVideo } = await import('./src/server/exportVideo');
         const result = await renderProjectVideo(payload);
 
         res.statusCode = 200;
@@ -50,11 +52,19 @@ const exportApiPlugin = (): PluginOption => {
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), exportApiPlugin()],
+  plugins: [
+    react(), 
+    process.env.NODE_ENV === 'production' ? null : exportApiPlugin()
+  ].filter(Boolean),
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
+  },
+  build: {
+    rollupOptions: {
+      external: ['@ffmpeg-installer/ffmpeg', '@remotion/bundler', '@remotion/renderer']
+    }
   },
   test: {
     environment: 'jsdom',
