@@ -29,6 +29,57 @@ export const ExportDebugPanel: React.FC = () => {
     });
   };
 
+  const testHybridExport = async () => {
+    setLogs([]);
+    addLog('info', 'Testing hybrid export (Edge Runtime + External Service)...');
+    
+    try {
+      addLog('info', 'Creating test project data...');
+      const testProject = {
+        images: [{ id: 'test', url: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==', order: 0 }],
+        transitions: ['fade'],
+        slideDurations: [2],
+        transitionDurations: [0.5],
+        captions: ['Test caption'],
+        captionColors: ['#ffffff'],
+        musicUrl: null,
+        exportSettings: {
+          resolution: '720p',
+          format: 'mp4',
+          quality: 'low',
+          fps: 30
+        },
+        aspectRatio: '16:9'
+      };
+      
+      addLog('info', 'Sending request to /api/export...');
+      const response = await fetch('/api/export', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ project: testProject })
+      });
+
+      addLog('info', `Response status: ${response.status}`);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        addLog('error', `Hybrid export failed: ${response.status} ${response.statusText}`, errorText);
+        return;
+      }
+
+      const contentType = response.headers.get('content-type');
+      const contentDisposition = response.headers.get('content-disposition');
+      
+      addLog('success', 'Hybrid export successful!', {
+        contentType,
+        contentDisposition,
+        size: response.headers.get('content-length')
+      });
+    } catch (error) {
+      addLog('error', 'Hybrid export error', error);
+    }
+  };
+
   const testEdgeRuntime = async () => {
     setLogs([]);
     addLog('info', 'Testing Edge Runtime endpoint...');
@@ -53,121 +104,6 @@ export const ExportDebugPanel: React.FC = () => {
       addLog('success', 'Edge runtime test successful!', result);
     } catch (error) {
       addLog('error', 'Edge runtime test error', error);
-    }
-  };
-
-  const testUltraSimple = async () => {
-    setLogs([]);
-    addLog('info', 'Testing ultra-simple endpoint...');
-    
-    try {
-      addLog('info', 'Sending request to /api/simple...');
-      const response = await fetch('/api/simple', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ test: 'minimal' })
-      });
-
-      addLog('info', `Response status: ${response.status}`);
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        addLog('error', `Ultra-simple test failed: ${response.status} ${response.statusText}`, errorText);
-        return;
-      }
-
-      const result = await response.json();
-      addLog('success', 'Ultra-simple test successful!', result);
-    } catch (error) {
-      addLog('error', 'Ultra-simple test error', error);
-    }
-  };
-
-  const testSimpleEndpoint = async () => {
-    setLogs([]);
-    addLog('info', 'Testing simple endpoint...');
-    
-    try {
-      addLog('info', 'Sending request to /api/test...');
-      const response = await fetch('/api/test', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ test: 'data' })
-      });
-
-      addLog('info', `Response status: ${response.status}`);
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        addLog('error', `Simple test failed: ${response.status} ${response.statusText}`, errorText);
-        return;
-      }
-
-      const result = await response.json();
-      addLog('success', 'Simple test successful!', result);
-    } catch (error) {
-      addLog('error', 'Simple test error', error);
-    }
-  };
-
-  const testExport = async () => {
-    setLogs([]);
-    addLog('info', 'Starting video export test...');
-    
-    try {
-      // Simple API test first
-      addLog('info', 'Testing API endpoint connectivity...');
-      const apiTest = await fetch('/api/export', {
-        method: 'GET', // Simple GET test
-      });
-      addLog('success', `API GET test: ${apiTest.status} ${apiTest.statusText}`);
-      
-      // Test 2: Check project data structure
-      addLog('info', 'Testing project data structure...');
-      const testProject = {
-        images: [{ id: 'test', url: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==', order: 0 }],
-        transitions: ['fade'],
-        slideDurations: [2],
-        transitionDurations: [0.5],
-        captions: ['Test caption'],
-        captionColors: ['#ffffff'],
-        musicUrl: null,
-        exportSettings: {
-          resolution: '720p',
-          format: 'mp4',
-          quality: 'low',
-          fps: 30
-        },
-        aspectRatio: '16:9'
-      };
-      addLog('success', 'Test project data created successfully');
-
-      // Test 3: Try actual export
-      addLog('info', 'Sending test export request...');
-      const response = await fetch('/api/export', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ project: testProject })
-      });
-
-      addLog('info', `Export response status: ${response.status}`);
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        addLog('error', `Export failed: ${response.status} ${response.statusText}`, errorText);
-        return;
-      }
-
-      const contentType = response.headers.get('content-type');
-      const contentDisposition = response.headers.get('content-disposition');
-      
-      addLog('success', 'Export successful!', {
-        contentType,
-        contentDisposition,
-        size: response.headers.get('content-length')
-      });
-    } catch (error) {
-      addLog('error', 'Test failed', error);
     }
   };
 
@@ -224,28 +160,16 @@ export const ExportDebugPanel: React.FC = () => {
           <div className="p-4 space-y-3">
             <div className="flex flex-wrap gap-2">
               <button
+                onClick={testHybridExport}
+                className="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium transition-colors"
+              >
+                🚀 Hybrid Export
+              </button>
+              <button
                 onClick={testEdgeRuntime}
                 className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors"
               >
                 🟠 Edge Runtime
-              </button>
-              <button
-                onClick={testUltraSimple}
-                className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium transition-colors"
-              >
-                🟣 Ultra Simple
-              </button>
-              <button
-                onClick={testSimpleEndpoint}
-                className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium transition-colors"
-              >
-                🟢 Test Simple API
-              </button>
-              <button
-                onClick={testExport}
-                className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors"
-              >
-                🔵 Test Export
               </button>
               <button
                 onClick={clearLogs}
@@ -258,7 +182,7 @@ export const ExportDebugPanel: React.FC = () => {
             <div className="space-y-2 max-h-60 overflow-y-auto border border-gray-200 rounded-lg p-3 bg-gray-50">
               {logs.length === 0 && (
                 <div className="p-3 text-gray-600 text-sm bg-white rounded border border-gray-200">
-                  📝 No logs yet. Start with "🟠 Edge Runtime" test.
+                  📝 No logs yet. Try "🚀 Hybrid Export" for the new video export system.
                 </div>
               )}
               {logs.map((log, index) => (

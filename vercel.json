@@ -4,8 +4,11 @@
   "installCommand": "npm install",
   "framework": "vite",
   "functions": {
+    "api/export.js": {
+      "runtime": "edge"
+    },
     "api/edge.js": {
-      "maxDuration": 10
+      "runtime": "edge"
     }
   },
   "git": {
