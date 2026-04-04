@@ -34,13 +34,13 @@ export const ExportDebugPanel: React.FC = () => {
     addLog('info', 'Starting video export test...');
     
     try {
-      // Test 1: Check if API endpoint exists
-      addLog('info', 'Testing API endpoint availability...');
+      // Simple API test first
+      addLog('info', 'Testing API endpoint connectivity...');
       const apiTest = await fetch('/api/export', {
-        method: 'OPTIONS'
+        method: 'GET', // Simple GET test
       });
-      addLog('success', `API endpoint responded: ${apiTest.status} ${apiTest.statusText}`);
-
+      addLog('success', `API GET test: ${apiTest.status} ${apiTest.statusText}`);
+      
       // Test 2: Check project data structure
       addLog('info', 'Testing project data structure...');
       const testProject = {
@@ -85,7 +85,6 @@ export const ExportDebugPanel: React.FC = () => {
         contentDisposition,
         size: response.headers.get('content-length')
       });
-
     } catch (error) {
       addLog('error', 'Test failed', error);
     }
