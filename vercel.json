@@ -5,7 +5,7 @@
   "framework": "vite",
   "functions": {
     "api/export/route.ts": {
-      "runtime": "@vercel/node"
+      "maxDuration": 300
     }
   },
   "git": {
