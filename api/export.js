@@ -1,8 +1,8 @@
-import { renderProjectVideo } from '../src/server/exportVideo';
-import type { ExportPayload } from '../src/server/exportVideo';
+import { renderProjectVideo } from '../src/server/exportVideo.js';
+import type { ExportPayload } from '../src/server/exportVideo.js';
 
 export const config = {
-  runtime: 'nodejs18.x',
+  runtime: 'nodejs',
   maxDuration: 300,
 };
 
