@@ -5,6 +5,7 @@
   "framework": "vite",
   "functions": {
     "api/export/route.ts": {
+      "runtime": "nodejs18.x",
       "maxDuration": 300
     }
   },
@@ -19,6 +20,5 @@
     "env": {
       "NODE_ENV": "production"
     }
-  },
-  "nodeVersion": "18.x"
+  }
 }
