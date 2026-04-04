@@ -1,15 +1,11 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import { type PluginOption } from 'vite';
-import type { IncomingMessage, ServerResponse } from 'node:http';
-import type { Connect } from 'vite';
-import { createRequire } from 'node:module';
 
 // Local API plugin for development
-const exportApiPlugin = (): PluginOption => {
-  const registerRoute = (middlewares: Connect.Server) => {
-    middlewares.use('/api/export', async (req: IncomingMessage, res: ServerResponse<IncomingMessage>) => {
+const exportApiPlugin = () => {
+  const registerRoute = (middlewares: any) => {
+    middlewares.use('/api/export', async (req: any, res: any) => {
       if (req.method !== 'POST') {
         res.statusCode = 405;
         res.setHeader('Content-Type', 'application/json');
@@ -45,11 +41,11 @@ const exportApiPlugin = (): PluginOption => {
 
   return {
     name: 'export-api',
-    configureServer(server) {
+    configureServer(server: any) {
       registerRoute(server.middlewares);
     },
-    configurePreviewServer(server) {
-      registerRoute(server.middlewares as Connect.Server);
+    configurePreviewServer(server: any) {
+      registerRoute(server.middlewares);
     },
   };
 };
