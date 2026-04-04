@@ -119,63 +119,64 @@ export const ExportDebugPanel: React.FC = () => {
       </div>
       
       <div className="fixed bottom-4 right-4 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-4 w-96 max-h-96">
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="font-semibold text-gray-800">Export Debug Panel</h3>
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="p-1 hover:bg-gray-100 rounded"
-        >
-          {isOpen ? <X className="w-4 h-4" /> : <Download className="w-4 h-4" />}
-        </button>
-      </div>
-
-      {isOpen && (
-        <div className="space-y-3">
-          <div className="flex gap-2">
-            <button
-              onClick={testExport}
-              className="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
-            >
-              Test Export
-            </button>
-            <button
-              onClick={clearLogs}
-              className="px-3 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 text-sm"
-            >
-              Clear Logs
-            </button>
-          </div>
-
-          <div className="space-y-2 max-h-60 overflow-y-auto">
-            {logs.length === 0 && (
-              <div className="p-2 text-gray-500 text-sm">
-                No logs yet. Click "Test Export" to start.
-              </div>
-            )}
-            {logs.map((log, index) => (
-              <div
-                key={index}
-                className={`p-2 rounded border ${getLogColor(log.level)}`}
-              >
-                <div className="flex items-center gap-2 mb-1">
-                  {getLogIcon(log.level)}
-                  <span className="font-medium text-sm">{log.level.toUpperCase()}</span>
-                  <span className="text-xs text-gray-500">{log.timestamp}</span>
-                </div>
-                <div className="text-sm">{log.message}</div>
-                {log.details && (
-                  <details className="mt-1">
-                    <summary className="text-xs text-gray-600 cursor-pointer">Details</summary>
-                    <pre className="text-xs bg-gray-50 p-2 mt-1 rounded overflow-x-auto">
-                      {JSON.stringify(log.details, null, 2)}
-                    </pre>
-                  </details>
-                )}
-              </div>
-            ))}
-          </div>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="font-semibold text-gray-800">Export Debug Panel</h3>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="p-1 hover:bg-gray-100 rounded"
+          >
+            {isOpen ? <X className="w-4 h-4" /> : <Download className="w-4 h-4" />}
+          </button>
         </div>
-      )}
-    </div>
+
+        {isOpen && (
+          <div className="space-y-3">
+            <div className="flex gap-2">
+              <button
+                onClick={testExport}
+                className="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
+              >
+                Test Export
+              </button>
+              <button
+                onClick={clearLogs}
+                className="px-3 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 text-sm"
+              >
+                Clear Logs
+              </button>
+            </div>
+
+            <div className="space-y-2 max-h-60 overflow-y-auto">
+              {logs.length === 0 && (
+                <div className="p-2 text-gray-500 text-sm">
+                  No logs yet. Click "Test Export" to start.
+                </div>
+              )}
+              {logs.map((log, index) => (
+                <div
+                  key={index}
+                  className={`p-2 rounded border ${getLogColor(log.level)}`}
+                >
+                  <div className="flex items-center gap-2 mb-1">
+                    {getLogIcon(log.level)}
+                    <span className="font-medium text-sm">{log.level.toUpperCase()}</span>
+                    <span className="text-xs text-gray-500">{log.timestamp}</span>
+                  </div>
+                  <div className="text-sm">{log.message}</div>
+                  {log.details && (
+                    <details className="mt-1">
+                      <summary className="text-xs text-gray-600 cursor-pointer">Details</summary>
+                      <pre className="text-xs bg-gray-50 p-2 mt-1 rounded overflow-x-auto">
+                        {JSON.stringify(log.details, null, 2)}
+                      </pre>
+                    </details>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </>
+  );
 };
