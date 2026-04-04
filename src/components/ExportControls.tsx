@@ -7,7 +7,9 @@ import type { ExportSettings } from '@/types';
 
 export const ExportControls: React.FC = () => {
   const [isExporting, setIsExporting] = React.useState(false);
-
+  
+  console.log('ExportControls component rendered');
+  
   const { images, transitions, captions, captionColors, musicFile, slideDurations, transitionDurations, exportSettings, aspectRatio, updateExportSettings, setExporting, exportProgress, setExportProgress, exportError, setExportError } = useProjectStore(
     useShallow((state) => ({
       images: state.images,
@@ -82,21 +84,27 @@ export const ExportControls: React.FC = () => {
   };
 
   const handleExport = async () => {
+    console.log('handleExport called, images.length:', images.length);
+    
     if (images.length === 0) {
+      console.log('No images, returning early');
       setExportError('Please upload images first');
       return;
     }
 
+    console.log('Starting export process...');
     setIsExporting(true);
     setExporting(true);
     setExportProgress(0);
     setExportError(null);
 
     try {
+      console.log('Setting progress to 10%');
       setExportProgress(10);
       const imageDataUrls = await Promise.all(project.images.map((image) => toDataUrl(image.url)));
       const musicUrl = project.musicFile ? await fileToDataUrl(project.musicFile) : null;
 
+      console.log('Progress 35%, sending API request...');
       setExportProgress(35);
       const response = await fetch('/api/export', {
         method: 'POST',
@@ -120,20 +128,28 @@ export const ExportControls: React.FC = () => {
         }),
       });
 
+      console.log('API response status:', response.status);
       if (!response.ok) {
+        console.log('API response not ok, parsing error...');
         const body = await response.json().catch(() => ({ error: 'Video export failed' }));
+        console.log('API error:', body);
         throw new Error(body.error || 'Video export failed');
       }
 
+      console.log('Progress 90%, downloading blob...');
       setExportProgress(90);
       const codecInfo = getCodecInfo(project.exportSettings.format);
       const blob = await response.blob();
       const filename = `portfolio-video-${Date.now()}.${codecInfo.container}`;
+      console.log('Downloading file:', filename);
       downloadBlob(new Blob([blob], { type: codecInfo.mimeType }), filename);
       setExportProgress(100);
+      console.log('Export completed successfully');
     } catch (error) {
+      console.log('Export error caught:', error);
       setExportError(error instanceof Error ? error.message : 'Export failed');
     } finally {
+      console.log('Export process finished, resetting state...');
       setIsExporting(false);
       setExporting(false);
     }
