@@ -19,5 +19,6 @@
     "env": {
       "NODE_ENV": "production"
     }
-  }
+  },
+  "nodeVersion": "18.x"
 }
