@@ -1,6 +1,6 @@
 import React from 'react';
 import hiHatLogo from '@/assets/hi-hat-logo-transparent.png';
-
+// 
 export const Footer: React.FC = () => {
   return (
     <footer className="pt-24 pb-12 border-t border-dark-border bg-dark-surface text-text-primary">
@@ -62,7 +62,7 @@ export const Footer: React.FC = () => {
               </a>
             </div>
           </div>
-
+      
           <div className="text-left">
             <h2 className="text-text-primary font-bold uppercase tracking-[0.2em] text-[11px] mb-4">Navigation</h2>
             <ul className="space-y-2">
