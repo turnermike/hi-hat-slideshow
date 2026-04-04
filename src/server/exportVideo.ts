@@ -68,35 +68,49 @@ const calculateTotalFrames = (slideDurations: number[], transitionDurations: num
 let compatBinariesDirectory: string | null = null;
 
 const getCompositorPackageName = () => {
-  if (process.platform !== 'darwin') return null;
-  if (process.arch === 'x64') return '@remotion/compositor-darwin-x64';
-  if (process.arch === 'arm64') return '@remotion/compositor-darwin-arm64';
+  if (process.platform === 'darwin') {
+    if (process.arch === 'x64') return '@remotion/compositor-darwin-x64';
+    if (process.arch === 'arm64') return '@remotion/compositor-darwin-arm64';
+  }
+  if (process.platform === 'linux') {
+    if (process.arch === 'x64') return '@remotion/compositor-linux-x64';
+    if (process.arch === 'arm64') return '@remotion/compositor-linux-arm64';
+  }
   return null;
 };
 
 const ensureCompatibleBinariesDirectory = async () => {
-  if (process.platform !== 'darwin') return null;
   if (compatBinariesDirectory) return compatBinariesDirectory;
 
   const require = createRequire(import.meta.url);
   const ffmpegInstaller = require('@ffmpeg-installer/ffmpeg') as { path: string };
   const compositorPackage = getCompositorPackageName();
-  if (!compositorPackage) return null;
+  
+  if (!compositorPackage) {
+    console.log('No compositor package found for platform:', process.platform, 'arch:', process.arch);
+    return null;
+  }
 
-  const compositorPackageJson = require.resolve(`${compositorPackage}/package.json`);
-  const compositorDir = path.dirname(compositorPackageJson);
-  const compatDir = path.join(os.tmpdir(), 'remotion-binaries-compat');
+  try {
+    const compositorPackageJson = require.resolve(`${compositorPackage}/package.json`);
+    const compositorDir = path.dirname(compositorPackageJson);
+    const compatDir = path.join(os.tmpdir(), 'remotion-binaries-compat');
 
-  await fs.mkdir(compatDir, { recursive: true });
-  await fs.copyFile(path.join(compositorDir, 'remotion'), path.join(compatDir, 'remotion'));
-  await fs.copyFile(path.join(compositorDir, 'ffprobe'), path.join(compatDir, 'ffprobe'));
-  await fs.copyFile(ffmpegInstaller.path, path.join(compatDir, 'ffmpeg'));
-  await fs.chmod(path.join(compatDir, 'remotion'), 0o755);
-  await fs.chmod(path.join(compatDir, 'ffprobe'), 0o755);
-  await fs.chmod(path.join(compatDir, 'ffmpeg'), 0o755);
+    await fs.mkdir(compatDir, { recursive: true });
+    await fs.copyFile(path.join(compositorDir, 'remotion'), path.join(compatDir, 'remotion'));
+    await fs.copyFile(path.join(compositorDir, 'ffprobe'), path.join(compatDir, 'ffprobe'));
+    await fs.copyFile(ffmpegInstaller.path, path.join(compatDir, 'ffmpeg'));
+    await fs.chmod(path.join(compatDir, 'remotion'), 0o755);
+    await fs.chmod(path.join(compatDir, 'ffprobe'), 0o755);
+    await fs.chmod(path.join(compatDir, 'ffmpeg'), 0o755);
 
-  compatBinariesDirectory = compatDir;
-  return compatBinariesDirectory;
+    compatBinariesDirectory = compatDir;
+    console.log('Binaries directory set up successfully:', compatDir);
+    return compatBinariesDirectory;
+  } catch (error) {
+    console.error('Failed to set up binaries directory:', error);
+    return null;
+  }
 };
 
 const getResolution = (project: ExportPayload['project']) => {
@@ -115,6 +129,11 @@ const getResolution = (project: ExportPayload['project']) => {
 
 export async function renderProjectVideo(payload: ExportPayload) {
   const binariesDirectory = await ensureCompatibleBinariesDirectory();
+  
+  if (!binariesDirectory) {
+    throw new Error(`Platform ${process.platform} with architecture ${process.arch} is not supported for video export. Please contact support.`);
+  }
+  
   const codecInfo = getCodecInfo(payload.project.exportSettings.format);
   const hasAudioTrack = Boolean(payload.project.musicUrl);
   const fps = payload.project.exportSettings.fps;
