@@ -29,6 +29,33 @@ export const ExportDebugPanel: React.FC = () => {
     });
   };
 
+  const testUltraSimple = async () => {
+    setLogs([]);
+    addLog('info', 'Testing ultra-simple endpoint...');
+    
+    try {
+      addLog('info', 'Sending request to /api/simple...');
+      const response = await fetch('/api/simple', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ test: 'minimal' })
+      });
+
+      addLog('info', `Response status: ${response.status}`);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        addLog('error', `Ultra-simple test failed: ${response.status} ${response.statusText}`, errorText);
+        return;
+      }
+
+      const result = await response.json();
+      addLog('success', 'Ultra-simple test successful!', result);
+    } catch (error) {
+      addLog('error', 'Ultra-simple test error', error);
+    }
+  };
+
   const testSimpleEndpoint = async () => {
     setLogs([]);
     addLog('info', 'Testing simple endpoint...');
@@ -170,6 +197,12 @@ export const ExportDebugPanel: React.FC = () => {
           <div className="p-4 space-y-3">
             <div className="flex flex-wrap gap-2">
               <button
+                onClick={testUltraSimple}
+                className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium transition-colors"
+              >
+                🟣 Ultra Simple
+              </button>
+              <button
                 onClick={testSimpleEndpoint}
                 className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium transition-colors"
               >
@@ -192,7 +225,7 @@ export const ExportDebugPanel: React.FC = () => {
             <div className="space-y-2 max-h-60 overflow-y-auto border border-gray-200 rounded-lg p-3 bg-gray-50">
               {logs.length === 0 && (
                 <div className="p-3 text-gray-600 text-sm bg-white rounded border border-gray-200">
-                  📝 No logs yet. Click "Test Simple API" first to verify Vercel functions work.
+                  📝 No logs yet. Start with "🟣 Ultra Simple" test.
                 </div>
               )}
               {logs.map((log, index) => (
