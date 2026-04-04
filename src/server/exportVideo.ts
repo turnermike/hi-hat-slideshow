@@ -19,7 +19,7 @@ export interface ExportPayload {
     aspectRatio: '16:9' | '9:16' | '1:1';
   };
 }
-
+//
 const RESOLUTION_MAP = {
   '720p': { width: 1280, height: 720 },
   '1080p': { width: 1920, height: 1080 },
