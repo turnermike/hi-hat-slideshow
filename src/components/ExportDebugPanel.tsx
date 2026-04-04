@@ -112,7 +112,13 @@ export const ExportDebugPanel: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-4 w-96 max-h-96">
+    <>
+      {/* Always visible test */}
+      <div className="fixed top-4 right-4 bg-yellow-100 border border-yellow-300 rounded p-2 text-xs z-40">
+        DEBUG PANEL ACTIVE
+      </div>
+      
+      <div className="fixed bottom-4 right-4 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-4 w-96 max-h-96">
       <div className="flex items-center justify-between mb-3">
         <h3 className="font-semibold text-gray-800">Export Debug Panel</h3>
         <button
@@ -171,5 +177,5 @@ export const ExportDebugPanel: React.FC = () => {
         </div>
       )}
     </div>
-  );
+    </>
 };
