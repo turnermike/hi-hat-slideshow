@@ -137,7 +137,10 @@ export const ExportControls: React.FC = () => {
       setExportProgress(95);
       
       const codecInfo = getCodecInfo(project.exportSettings.format);
-      const filename = `portfolio-video-${Date.now()}.${codecInfo.container}`;
+      const now = new Date();
+      const dateStr = now.toISOString().split('T')[0]; // YYYY-MM-DD format
+      const timeStr = now.toTimeString().split(' ')[0].replace(/:/g, '-'); // HH-MM-SS format
+      const filename = `slideshow-${project.exportSettings.resolution}-${project.exportSettings.quality}-${dateStr}-${timeStr}.${codecInfo.container}`;
       downloadBlob(videoBlob, filename);
       
       setExportProgress(100);
