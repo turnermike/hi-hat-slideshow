@@ -82,9 +82,9 @@ export const initialProjectState: ProjectState = {
   captionColors: [],
   musicFile: null,
   exportSettings: {
-    resolution: '1080p',
+    resolution: '720p',
     format: 'mp4',
-    quality: 'high',
+    quality: 'low',
     fps: 30,
   },
   aspectRatio: '16:9',
