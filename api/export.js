@@ -2,58 +2,51 @@ export const config = {
   runtime: 'edge'
 };
 
-// External video processing service (you can replace this with your preferred service)
-const VIDEO_PROCESSING_SERVICE = 'https://api.remotion.dev/render';
-
 export default async function handler(req) {
+  // Add CORS headers for all requests
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  };
+
+  // Handle OPTIONS requests for CORS
+  if (req.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 200,
+      headers: corsHeaders
+    });
+  }
+
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({error: 'Method not allowed'}), {
       status: 405,
-      headers: {'content-type': 'application/json'}
+      headers: {...corsHeaders, 'content-type': 'application/json'}
     });
   }
 
   try {
     const payload = await req.json();
     
+    console.log('Export request received:', JSON.stringify(payload, null, 2));
+    
     if (!payload.project) {
       return new Response(JSON.stringify({error: 'Invalid payload: project data required'}), {
         status: 400,
-        headers: {'content-type': 'application/json'}
+        headers: {...corsHeaders, 'content-type': 'application/json'}
       });
     }
 
-    console.log('Starting video export via external service...');
+    console.log('Starting video export...');
 
-    // Call external video processing service
-    const response = await fetch(VIDEO_PROCESSING_SERVICE, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.REMOTION_API_KEY || 'demo-key'}`
-      },
-      body: JSON.stringify({
-        composition: 'SlideShow',
-        inputProps: { project: payload.project },
-        codec: 'h264',
-        fps: payload.project.exportSettings?.fps || 30,
-        width: 1920,
-        height: 1080,
-        durationInFrames: 180 // 6 seconds at 30fps
-      })
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Video processing failed: ${response.status} ${errorText}`);
-    }
-
-    // Get the video data
-    const videoBuffer = await response.arrayBuffer();
+    // For now, return a mock video response to test the pipeline
+    // We'll implement actual video processing next
+    const mockVideoBuffer = new Uint8Array([0x00, 0x00, 0x00, 0x20]); // Minimal MP4 header
     
-    return new Response(videoBuffer, {
+    return new Response(mockVideoBuffer, {
       status: 200,
       headers: {
+        ...corsHeaders,
         'Content-Type': 'video/mp4',
         'Content-Disposition': `attachment; filename="portfolio-video-${Date.now()}.mp4"`
       }
@@ -65,7 +58,7 @@ export default async function handler(req) {
       error: error instanceof Error ? error.message : 'Video export failed'
     }), {
       status: 500,
-      headers: {'content-type': 'application/json'}
+      headers: {...corsHeaders, 'content-type': 'application/json'}
     });
   }
 }
