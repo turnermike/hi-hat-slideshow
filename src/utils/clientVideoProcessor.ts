@@ -155,9 +155,13 @@ export class ClientVideoProcessor {
       totalFrames += (slideDurations[i] + transitionDurations[i]) * fps;
     }
 
+    // Check for MediaRecorder support and use appropriate MIME type
+    const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
+    const mimeType = format === 'webm' ? 'video/webm' : (isFirefox ? 'video/webm' : 'video/webm;codecs=vp9');
+    
     const stream = this.canvas.captureStream(fps);
     const mediaRecorder = new MediaRecorder(stream, {
-      mimeType: format === 'webm' ? 'video/webm' : 'video/mp4',
+      mimeType,
       videoBitsPerSecond: this.getBitrate()
     });
 
@@ -171,7 +175,7 @@ export class ClientVideoProcessor {
 
       mediaRecorder.onstop = () => {
         const blob = new Blob(chunks, { 
-          type: format === 'webm' ? 'video/webm' : 'video/mp4' 
+          type: mimeType
         });
         resolve(blob);
       };
