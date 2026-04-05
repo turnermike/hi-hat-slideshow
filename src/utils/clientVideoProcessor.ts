@@ -40,7 +40,8 @@ export class ClientVideoProcessor {
   }
 
   private getResolution() {
-    const { resolution, aspectRatio } = this.project.exportSettings;
+    const { resolution } = this.project.exportSettings;
+    const { aspectRatio } = this.project;
     
     // Base resolutions
     const resolutions: Record<string, { width: number; height: number }> = {
@@ -82,8 +83,8 @@ export class ClientVideoProcessor {
     this.ctx.fillRect(0, 0, width, height);
 
     // Calculate which slide we're on
-    const { images, slideDurations, transitionDurations, fps } = this.project;
-    const frameTime = 1 / fps;
+    const { images, slideDurations, transitionDurations } = this.project;
+    const fps = this.project.exportSettings.fps;
     let currentFrame = 0;
     let slideIndex = 0;
 
