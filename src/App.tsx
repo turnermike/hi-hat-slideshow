@@ -11,6 +11,7 @@ import { AspectRatioSelector } from '@/components/AspectRatioSelector';
 import { Comment } from '@/components/Comment';
 import { Footer } from '@/components/Footer';
 import { ExportDebugPanel } from '@/components/ExportDebugPanel';
+import { ExportSettingsInfo } from '@/components/ExportSettingsInfo';
 import hiHatLogo from '@/assets/hi-hat-logo-transparent.png';
 
 function App() {
@@ -128,6 +129,11 @@ function App() {
           </div>
         </div>
       )}
+      
+      <Comment text="========== EXPORT SETTINGS INFO ==========" />
+      <div className="main-content mx-auto px-6 py-6">
+        <ExportSettingsInfo />
+      </div>
       
       <Comment text="========== DEBUG PANEL ==========" />
       <ExportDebugPanel />
