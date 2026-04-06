@@ -24,7 +24,7 @@ export async function POST(request: Request) {
       status: 200,
       headers: {
         'Content-Type': result.mimeType,
-        'Content-Disposition': `attachment; filename="portfolio-video-${Date.now()}.${result.fileExtension}"`,
+        'Content-Disposition': `attachment; filename="portfolio-video-${new Date().toISOString().slice(0, 10).replace(/-/g, '')}.${result.fileExtension}"`,
       },
     });
   } catch (error) {
