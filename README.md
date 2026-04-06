@@ -52,7 +52,7 @@ A professional portfolio video slideshow application built with React, TypeScrip
 
 ## 🚀 Quick Start
 
-### Clone the repository
+### Clone repository
 
 ```bash
 git clone https://github.com/your-username/hi-hat-slideshow.git
@@ -67,7 +67,7 @@ npm install
 
 ### Development Server
 
-Start the development server with hot module replacement:
+Start development server with hot module replacement:
 
 ```bash
 npm run dev
@@ -86,7 +86,7 @@ The terminal will show:
 
 ## 🧪 Testing
 
-Run the comprehensive test suite:
+Run comprehensive test suite:
 
 ```bash
 npm run test
@@ -118,7 +118,7 @@ Create an optimized production build:
 npm run build
 ```
 
-Output will be in the `dist/` directory, ready for deployment.
+Output will be in `dist/` directory, ready for deployment.
 
 ### Preview Production Build
 
@@ -154,8 +154,8 @@ src/
 
 ## 📖 How to Use
 
-1. **📤 Upload Images**: Drag images into the upload area or click to select files (PNG, JPG, WEBP)
-2. **🔄 Organize Slides**: Drag to reorder slides in the timeline
+1. **📤 Upload Images**: Drag images into upload area or click to select files (PNG, JPG, WEBP)
+2. **🔄 Organize Slides**: Drag to reorder slides in timeline
 3. **⚙️ Configure Slides**:
    - Adjust slide duration (1-10 seconds)
    - Adjust transition duration (0.5-2 seconds)
@@ -184,10 +184,48 @@ src/
 
 ## 🔧 Troubleshooting
 
+### 🐛 Debug Panel
+
+The application includes a debug panel for testing export functionality and troubleshooting issues.
+
+**Accessing Debug Panel:**
+
+To enable the debug panel, add `?debug=1` to the URL:
+
+```
+https://yoursite.com/?debug=1
+```
+
+**Debug Panel Features:**
+
+- 🚀 **Hybrid Export** - Tests the complete video export pipeline
+- 🟠 **Edge Runtime** - Tests Vercel Edge Runtime functionality
+- 🗑️ **Clear Logs** - Clears debug log history
+- 📋 **Detailed Logs** - Shows API responses, errors, and timing
+
+**Debug Panel Usage:**
+
+1. **Enable Debug Mode**: Add `?debug=1` to your URL
+2. **Open Debug Panel**: Click the red bug button in bottom-right corner
+3. **Run Tests**: Click any test button to see detailed logs
+4. **View Results**: Check logs for API responses, errors, and timing
+5. **Disable Debug**: Remove `?debug=1` from URL to hide panel
+
+**Debug Panel Location:**
+
+- **Hidden by default** - No debug UI for regular users
+- **Bottom-right corner** - Red bug icon when debug mode is active
+- **Fixed position** - Stays visible while scrolling
+- **Detailed logging** - Shows timestamps, levels, and API responses
+
+**Security Note:**
+
+The debug panel is intentionally hidden by default to prevent exposing debugging tools to regular users. Only enable when specifically troubleshooting export issues.
+
 **Port 5173 already in use?**
 
 ```bash
-# Kill the process using the port (macOS/Linux)
+# Kill process using the port (macOS/Linux)
 lsof -ti:5173 | xargs kill -9
 
 # Or specify a different port
@@ -217,13 +255,13 @@ npm run test -- --clearCache
 
 ### Production Deployment
 
-This project uses a branch-based deployment strategy with Vercel. Only pushes to the `deploy-production` branch will trigger automatic deployments.
+This project uses a branch-based deployment strategy with Vercel. Only pushes to `deploy-production` branch will trigger automatic deployments.
 
 **🌐 Live Site:** https://hi-hat-slideshow.vercel.app
 
 ### Deployment Workflow
 
-1. **Development**: Work on the `dev` branch
+1. **Development**: Work on `dev` branch
 2. **Ready for Production**: Merge changes to `deploy-production`
 3. **Auto-Deploy**: Vercel automatically deploys when `deploy-production` is pushed
 
@@ -240,11 +278,11 @@ git push origin deploy-production  # Triggers Vercel deployment
 npm run build
 ```
 
-The built files will be in the `dist/` directory, ready for deployment.
+The built files will be in `dist/` directory, ready for deployment.
 
 ### Vercel Configuration
 
-The project is configured to only deploy from the `deploy-production` branch. Other branches (`main`, `dev`) will not trigger deployments.
+The project is configured to only deploy from `deploy-production` branch. Other branches (`main`, `dev`) will not trigger deployments.
 
 - **Build Command**: `npm run build`
 - **Output Directory**: `dist`
@@ -255,7 +293,7 @@ The project is configured to only deploy from the `deploy-production` branch. Ot
 
 Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
-1. Fork the repository
+1. Fork repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
@@ -263,14 +301,14 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
 - [Remotion](https://www.remotion.dev/) for the amazing video rendering library
-- [React](https://reactjs.org/) for the UI framework
-- [Tailwind CSS](https://tailwindcss.com/) for the utility-first CSS framework
-- [Vite](https://vitejs.dev/) for the blazing-fast build tool
+- [React](https://reactjs.org/) for UI framework
+- [Tailwind CSS](https://tailwindcss.com/) for utility-first CSS framework
+- [Vite](https://vitejs.dev/) for blazing-fast build tool
 
 ## 📞 Contact
 
