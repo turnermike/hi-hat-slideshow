@@ -12,7 +12,7 @@ const ExportSettingsInfo = lazy(() => import('@/components/ExportSettingsInfo').
 const Footer = lazy(() => import('@/components/Footer').then((module) => ({ default: module.Footer })));
 import { Comment } from '@/components/Comment';
 const ExportDebugPanel = lazy(() => import('@/components/ExportDebugPanel').then((module) => ({ default: module.ExportDebugPanel })));
-import hiHatLogo from '@/assets/hi-hat-logo-transparent.png';
+import hiHatLogo from '@/assets/hi-hat-logo-transparent-48.png';
 
 function App() {
   const canonicalUrl = 'https://slideshow.hi-hatconsulting.com/';
@@ -37,7 +37,7 @@ function App() {
         <div className="inner-wrapper mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <img src={hiHatLogo} alt="Hi-hat Logo" width={48} height={48} className="w-12 h-12" />
+              <img src={hiHatLogo} alt="Hi-hat Logo" width={48} height={48} decoding="async" className="w-12 h-12" />
               <h1 className="text-2xl font-bold">Hi-hat Slideshow Video Generator</h1>
             </div>
           </div>
