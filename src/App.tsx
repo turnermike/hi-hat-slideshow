@@ -36,8 +36,10 @@ function App() {
       <header>
         <div className="inner-wrapper mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <img src={hiHatLogo} alt="Hi-hat Logo" width={48} height={48} decoding="async" className="w-12 h-12" />
+            <div className="group flex items-center gap-3">
+              <div className="relative h-12 w-12 overflow-hidden transition-transform duration-500 group-hover:rotate-3 group-hover:scale-105 flex items-center justify-center">
+                <img src={hiHatLogo} alt="Hi-hat Logo" width={48} height={48} decoding="async" className="w-full h-full object-contain p-1.5" />
+              </div>
               <h1 className="text-2xl font-bold">Hi-hat Slideshow Video Generator</h1>
             </div>
           </div>
