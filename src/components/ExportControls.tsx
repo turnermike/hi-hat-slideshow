@@ -2,6 +2,7 @@ import React from 'react';
 import { Download, AlertCircle } from 'lucide-react';
 import { useProjectStore } from '@/stores/projectStore';
 import { useShallow } from 'zustand/react/shallow';
+import { event } from '@/utils/analytics';
 import { estimateFileSize, formatDurationString, getCodecInfo } from '@/utils/videoExporter';
 import { ClientVideoProcessor } from '@/utils/clientVideoProcessor';
 import type { ExportSettings } from '@/types';
@@ -89,6 +90,11 @@ export const ExportControls: React.FC = () => {
     
     if (images.length === 0) {
       console.log('No images, returning early');
+      event({
+        action: 'start_export_failed',
+        category: 'conversion',
+        label: 'no_images',
+      });
       setExportError('Please upload images first');
       return;
     }
@@ -100,6 +106,12 @@ export const ExportControls: React.FC = () => {
     setExportError(null);
 
     try {
+      event({
+        action: 'start_export',
+        category: 'conversion',
+        label: `${exportSettings.format}-${exportSettings.resolution}-${exportSettings.quality}`,
+        value: project.images.length,
+      });
       console.log('Converting images to data URLs...');
       setExportProgress(10);
       const imageDataUrls = await Promise.all(project.images.map((image) => toDataUrl(image.url)));
@@ -143,10 +155,21 @@ export const ExportControls: React.FC = () => {
       const filename = `slideshow-${project.exportSettings.resolution}-${project.exportSettings.quality}-${dateStr}-${timeStr}.${codecInfo.container}`;
       downloadBlob(videoBlob, filename);
       
+      event({
+        action: 'export_complete',
+        category: 'conversion',
+        label: `${exportSettings.format}-${exportSettings.resolution}-${exportSettings.quality}`,
+        value: videoDuration,
+      });
       setExportProgress(100);
       console.log('Export completed successfully');
       
     } catch (error) {
+      event({
+        action: 'export_failed',
+        category: 'conversion',
+        label: error instanceof Error ? error.message : 'unknown_error',
+      });
       console.log('Export error caught:', error);
       setExportError(error instanceof Error ? error.message : 'Export failed');
     } finally {
@@ -165,7 +188,20 @@ export const ExportControls: React.FC = () => {
         {/* Resolution */}
         <div>
           <label className="text-text-secondary text-xs block mb-1">Resolution</label>
-          <select value={exportSettings.resolution} onChange={(e) => updateExportSettings({ resolution: e.target.value as ExportSettings['resolution'] })} disabled={isExporting} className="w-full bg-dark-border border border-dark-border rounded px-2 py-1.5 text-text-primary text-sm disabled:opacity-50">
+          <select
+            value={exportSettings.resolution}
+            onChange={(e) => {
+              const resolution = e.target.value as ExportSettings['resolution'];
+              updateExportSettings({ resolution });
+              event({
+                action: 'select_resolution',
+                category: 'settings',
+                label: resolution,
+              });
+            }}
+            disabled={isExporting}
+            className="w-full bg-dark-border border border-dark-border rounded px-2 py-1.5 text-text-primary text-sm disabled:opacity-50"
+          >
             <option value="720p">720p (1280×720)</option>
             <option value="1080p">1080p (1920×1080)</option>
             <option value="4k">4K (3840×2160)</option>
@@ -176,7 +212,20 @@ export const ExportControls: React.FC = () => {
         {/* Format */}
         <div>
           <label className="text-text-secondary text-xs block mb-1">Format</label>
-          <select value={exportSettings.format} onChange={(e) => updateExportSettings({ format: e.target.value as 'mp4' | 'webm' })} disabled={isExporting} className="w-full bg-dark-border border border-dark-border rounded px-2 py-1.5 text-text-primary text-sm disabled:opacity-50">
+          <select
+            value={exportSettings.format}
+            onChange={(e) => {
+              const format = e.target.value as 'mp4' | 'webm';
+              updateExportSettings({ format });
+              event({
+                action: 'select_format',
+                category: 'settings',
+                label: format,
+              });
+            }}
+            disabled={isExporting}
+            className="w-full bg-dark-border border border-dark-border rounded px-2 py-1.5 text-text-primary text-sm disabled:opacity-50"
+          >
             <option value="mp4">MP4 (H.264)</option>
             <option value="webm">WebM (VP9)</option>
           </select>
@@ -188,7 +237,20 @@ export const ExportControls: React.FC = () => {
         {/* Quality */}
         <div>
           <label className="text-text-secondary text-xs block mb-1">Quality</label>
-          <select value={exportSettings.quality} onChange={(e) => updateExportSettings({ quality: e.target.value as 'low' | 'medium' | 'high' })} disabled={isExporting} className="w-full bg-dark-border border border-dark-border rounded px-2 py-1.5 text-text-primary text-sm disabled:opacity-50">
+          <select
+            value={exportSettings.quality}
+            onChange={(e) => {
+              const quality = e.target.value as 'low' | 'medium' | 'high';
+              updateExportSettings({ quality });
+              event({
+                action: 'select_quality',
+                category: 'settings',
+                label: quality,
+              });
+            }}
+            disabled={isExporting}
+            className="w-full bg-dark-border border border-dark-border rounded px-2 py-1.5 text-text-primary text-sm disabled:opacity-50"
+          >
             <option value="low">Low (Faster)</option>
             <option value="medium">Medium</option>
             <option value="high">High (Best)</option>
@@ -198,7 +260,21 @@ export const ExportControls: React.FC = () => {
         {/* FPS */}
         <div>
           <label className="text-text-secondary text-xs block mb-1">Frame Rate</label>
-          <select value={exportSettings.fps} onChange={(e) => updateExportSettings({ fps: parseInt(e.target.value) as 24 | 30 | 60 })} disabled={isExporting} className="w-full bg-dark-border border border-dark-border rounded px-2 py-1.5 text-text-primary text-sm disabled:opacity-50">
+          <select
+            value={exportSettings.fps}
+            onChange={(e) => {
+              const fps = parseInt(e.target.value) as 24 | 30 | 60;
+              updateExportSettings({ fps });
+              event({
+                action: 'select_fps',
+                category: 'settings',
+                label: fps.toString(),
+                value: fps,
+              });
+            }}
+            disabled={isExporting}
+            className="w-full bg-dark-border border border-dark-border rounded px-2 py-1.5 text-text-primary text-sm disabled:opacity-50"
+          >
             <option value="24">24 FPS</option>
             <option value="30">30 FPS</option>
             <option value="60">60 FPS</option>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useProjectStore } from '@/stores/projectStore';
+import { event } from '@/utils/analytics';
 import { useShallow } from 'zustand/react/shallow';
 import type { AspectRatio } from '@/types';
 
@@ -40,7 +41,18 @@ export const AspectRatioSelector: React.FC = () => {
       <h3 className="text-text-primary font-medium">Aspect Ratio</h3>
       <div className="grid grid-cols-3 gap-2">
         {ASPECT_RATIOS.map((option) => (
-          <button key={option.ratio} onClick={() => setAspectRatio(option.ratio)} className={`p-2 rounded-lg border-2 transition-colors text-center ${aspectRatio === option.ratio ? 'border-primary bg-primary/5' : 'border-dark-border'}`}>
+          <button
+            key={option.ratio}
+            onClick={() => {
+              setAspectRatio(option.ratio);
+              event({
+                action: 'select_aspect_ratio',
+                category: 'settings',
+                label: option.ratio,
+              });
+            }}
+            className={`p-2 rounded-lg border-2 transition-colors text-center ${aspectRatio === option.ratio ? 'border-primary bg-primary/5' : 'border-dark-border'}`}
+          >
             <p className="text-text-primary font-medium text-sm">{option.label}</p>
             <p className="text-text-secondary text-xs">{option.description}</p>
           </button>

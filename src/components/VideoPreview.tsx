@@ -3,6 +3,7 @@ import { Player } from '@remotion/player';
 import { Play, Pause, Maximize, Volume2, VolumeX } from 'lucide-react';
 import { useProjectStore } from '@/stores/projectStore';
 import { useShallow } from 'zustand/react/shallow';
+import { event } from '@/utils/analytics';
 import { SlideShow } from './SlideShow';
 import { calculateTotalFrames } from '@/utils/transitions';
 import { Comment } from '@/components/Comment';
@@ -102,8 +103,10 @@ export const VideoPreview: React.FC = () => {
             if (playerRef.current) {
               if (isPlaying) {
                 playerRef.current.pause();
+                event({ action: 'pause_preview', category: 'engagement' });
               } else {
                 playerRef.current.play();
+                event({ action: 'play_preview', category: 'engagement' });
               }
               setIsPlaying(!isPlaying);
             }
@@ -114,7 +117,17 @@ export const VideoPreview: React.FC = () => {
           {isPlaying ? <Pause className="w-5 h-5 text-primary" /> : <Play className="w-5 h-5 text-primary" />}
         </button>
 
-        <button onClick={() => setIsMuted(!isMuted)} className="p-2 hover:bg-dark-border rounded transition-colors" title={isMuted ? 'Unmute' : 'Mute'}>
+        <button
+          onClick={() => {
+            setIsMuted(!isMuted);
+            event({
+              action: isMuted ? 'unmute_preview' : 'mute_preview',
+              category: 'engagement',
+            });
+          }}
+          className="p-2 hover:bg-dark-border rounded transition-colors"
+          title={isMuted ? 'Unmute' : 'Mute'}
+        >
           {isMuted ? <VolumeX className="w-5 h-5 text-text-secondary" /> : <Volume2 className="w-5 h-5 text-primary" />}
         </button>
 
@@ -145,6 +158,7 @@ export const VideoPreview: React.FC = () => {
           onClick={() => {
             if (playerRef.current) {
               playerRef.current.toggleFullscreen();
+              event({ action: 'preview_fullscreen', category: 'engagement' });
             }
           }}
           className="p-2 hover:bg-dark-border rounded transition-colors"

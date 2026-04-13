@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { HelpCircle } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faLinkedinIn, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import './App.css';
+import { pageview } from '@/utils/analytics';
 import { UploadZone } from '@/components/UploadZone/UploadZone';
 import { ImagePreview } from '@/components/UploadZone/ImagePreview';
 import { VideoPreview } from '@/components/VideoPreview';
@@ -18,10 +19,15 @@ import hiHatLogo from '@/assets/hi-hat-logo-transparent.png';
 
 function App() {
   const [showHelp, setShowHelp] = React.useState(false);
-  const shareUrl = encodeURIComponent('https://hi-hat.consulting/');
+  const canonicalUrl = 'https://slideshow.hi-hatconsulting.com/';
+  const shareUrl = encodeURIComponent(canonicalUrl);
   const shareText = encodeURIComponent('Check out the Hi-hat Slideshow Video Generator — create polished slideshow videos fast.');
+  const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}&quote=${shareText}`;
 
-  //
+  useEffect(() => {
+    pageview(window.location.pathname);
+  }, []);
+
   return (
     <div className="min-h-screen bg-dark-bg text-text-primary">
       <Comment text="========== APP HEADER ==========" />
@@ -79,7 +85,7 @@ function App() {
             <div className="mt-6 border-t border-dark-border pt-6">
               <p className="text-text-primary font-medium mb-3">Share the app:</p>
               <div className="flex flex-wrap gap-3">
-                <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-lg border border-dark-border bg-dark-bg px-4 py-2 text-text-primary hover:bg-dark-border transition-colors">
+                <a href={facebookShareUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-lg border border-dark-border bg-dark-bg px-4 py-2 text-text-primary hover:bg-dark-border transition-colors">
                   <FontAwesomeIcon icon={faFacebookF} className="w-4 h-4" />
                   Facebook
                 </a>

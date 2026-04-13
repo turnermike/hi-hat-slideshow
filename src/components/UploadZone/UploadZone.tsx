@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { validateImageFile, optimizeImage } from '@/utils/imageOptimizer';
 import { useProjectStore } from '@/stores/projectStore';
+import { event } from '@/utils/analytics';
 import { AlertCircle } from 'lucide-react';
 
 export const UploadZone: React.FC = () => {
@@ -34,6 +35,12 @@ export const UploadZone: React.FC = () => {
             optimizedFiles.push(optimizedFile);
           }
           addImages(optimizedFiles);
+          event({
+            action: 'upload_images',
+            category: 'media',
+            label: `${optimizedFiles.length} images`,
+            value: optimizedFiles.length,
+          });
         } catch (err) {
           validationErrors.push(`Failed to process images: ${err instanceof Error ? err.message : 'Unknown error'}`);
         }

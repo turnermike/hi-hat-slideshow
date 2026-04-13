@@ -1,6 +1,7 @@
 import React from 'react';
 import { Music, X } from 'lucide-react';
 import { useProjectStore } from '@/stores/projectStore';
+import { event } from '@/utils/analytics';
 import { useShallow } from 'zustand/react/shallow';
 
 export const AudioUpload: React.FC = () => {
@@ -36,6 +37,12 @@ export const AudioUpload: React.FC = () => {
     audio.onloadedmetadata = () => {
       setDuration(audio.duration);
       setMusicFile(file);
+      event({
+        action: 'select_audio',
+        category: 'media',
+        label: file.type,
+        value: file.size,
+      });
     };
     audio.onerror = () => {
       setError('Could not load audio file');
@@ -45,6 +52,10 @@ export const AudioUpload: React.FC = () => {
   const handleRemove = () => {
     setMusicFile(null);
     setDuration(null);
+    event({
+      action: 'remove_audio',
+      category: 'media',
+    });
   };
 
   const formatTime = (seconds: number) => {
