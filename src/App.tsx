@@ -1,5 +1,4 @@
 import React, { useEffect, lazy, Suspense } from 'react';
-import { HelpCircle } from 'lucide-react';
 import './App.css';
 import { pageview } from '@/utils/analytics';
 import { UploadZone } from '@/components/UploadZone/UploadZone';
@@ -16,7 +15,6 @@ const ExportDebugPanel = lazy(() => import('@/components/ExportDebugPanel').then
 import hiHatLogo from '@/assets/hi-hat-logo-transparent.png';
 
 function App() {
-  const [showHelp, setShowHelp] = React.useState(false);
   const canonicalUrl = 'https://slideshow.hi-hatconsulting.com/';
   const shareUrl = encodeURIComponent(canonicalUrl);
   const shareText = encodeURIComponent('Check out the Hi-hat Slideshow Video Generator — create polished slideshow videos fast.');
@@ -30,7 +28,7 @@ function App() {
     <div className="bg-dark-surface border border-dark-border rounded-lg p-4 min-h-[140px] flex items-center justify-center">
       <p className="text-text-secondary">Loading…</p>
     </div>
-  )
+  );
 
   return (
     <div className="min-h-screen bg-dark-bg text-text-primary">
@@ -42,9 +40,6 @@ function App() {
               <img src={hiHatLogo} alt="Hi-hat Logo" width={48} height={48} className="w-12 h-12" />
               <h1 className="text-2xl font-bold">Hi-hat Slideshow Video Generator</h1>
             </div>
-            <button onClick={() => setShowHelp(!showHelp)} className="p-2 hover:bg-dark-border rounded transition-colors" title="Help">
-              <HelpCircle className="w-6 h-6 text-text-secondary" />
-            </button>
           </div>
           <p className="text-text-secondary text-left pb-4">Create polished slideshow videos from your images with an intuitive editor built for fast results. Upload photos, layer captions, pick from six animated transitions, add background music, and export in multiple resolutions including 4K. Preview your slideshow instantly, choose the right aspect ratio, and get a finished video that’s ready to share.</p>
           <p className="text-text-secondary text-left pb-4">
@@ -171,7 +166,13 @@ function App() {
           <div className="lg:col-span-1">
             <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
               <h2 className="text-text-primary font-medium mb-3">Preview</h2>
-              <Suspense fallback={<div className="w-full bg-dark-surface rounded-lg border border-dark-border p-8 flex items-center justify-center min-h-96"><p className="text-text-secondary">Loading preview…</p></div>}>
+              <Suspense
+                fallback={
+                  <div className="w-full bg-dark-surface rounded-lg border border-dark-border p-8 flex items-center justify-center min-h-96">
+                    <p className="text-text-secondary">Loading preview…</p>
+                  </div>
+                }
+              >
                 <VideoPreview />
               </Suspense>
             </section>
@@ -188,35 +189,6 @@ function App() {
           </div>
         </div>
       </main>
-
-      <Comment text="========== HELP MODAL ==========" />
-      {showHelp && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-dark-surface border border-dark-border rounded-lg p-6 max-w-md">
-            <h2 className="text-text-primary font-bold text-lg mb-3">How to use</h2>
-            <ul className="text-text-secondary text-sm space-y-2">
-              <li>
-                <strong>Upload:</strong> Drag & drop or click to add images (PNG, JPG, WEBP)
-              </li>
-              <li>
-                <strong>Reorder:</strong> Drag thumbnails to rearrange slides
-              </li>
-              <li>
-                <strong>Configure:</strong> Select transitions, durations, and captions per slide
-              </li>
-              <li>
-                <strong>Add Audio:</strong> Upload background music (MP3, WAV, OGG)
-              </li>
-              <li>
-                <strong>Export:</strong> Choose resolution and format, then export
-              </li>
-            </ul>
-            <button onClick={() => setShowHelp(false)} className="w-full mt-4 bg-primary hover:bg-primary/90 text-white py-2 rounded transition-colors">
-              Close
-            </button>
-          </div>
-        </div>
-      )}
 
       <Comment text="========== DEBUG PANEL ==========" />
       <Suspense fallback={null}>
