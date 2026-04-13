@@ -1,7 +1,7 @@
 import React from 'react';
 import { Music, X } from 'lucide-react';
 import { useProjectStore } from '@/stores/projectStore';
-import { event } from '@/utils/analytics';
+import { event as trackEvent } from '@/utils/analytics';
 import { useShallow } from 'zustand/react/shallow';
 
 export const AudioUpload: React.FC = () => {
@@ -37,7 +37,7 @@ export const AudioUpload: React.FC = () => {
     audio.onloadedmetadata = () => {
       setDuration(audio.duration);
       setMusicFile(file);
-      event({
+      trackEvent({
         action: 'select_audio',
         category: 'media',
         label: file.type,
@@ -52,7 +52,7 @@ export const AudioUpload: React.FC = () => {
   const handleRemove = () => {
     setMusicFile(null);
     setDuration(null);
-    event({
+    trackEvent({
       action: 'remove_audio',
       category: 'media',
     });
