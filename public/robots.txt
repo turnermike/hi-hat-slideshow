@@ -1,0 +1,6 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://slideshow.hi-hatconsulting.com/sitemap.xml
+
+# Allow all crawlers to index the site.
