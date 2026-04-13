@@ -193,7 +193,7 @@ export const SlideShow: React.FC<SlideShowProps> = ({ project }) => {
                 fontWeight: 'normal',
                 textAlign: 'center',
                 maxWidth: '90%',
-                fontFamily: '"Onest", sans-serif',
+                fontFamily: 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
               }}
             >
               {safeProject.captions[activeCaptionIndex]}

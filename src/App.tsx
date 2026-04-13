@@ -1,20 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, lazy, Suspense } from 'react';
 import { HelpCircle } from 'lucide-react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebookF, faLinkedinIn, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import './App.css';
 import { pageview } from '@/utils/analytics';
 import { UploadZone } from '@/components/UploadZone/UploadZone';
-import { ImagePreview } from '@/components/UploadZone/ImagePreview';
-import { VideoPreview } from '@/components/VideoPreview';
-import { Timeline } from '@/components/Timeline/Timeline';
-import { AudioUpload } from '@/components/AudioUpload';
-import { ExportControls } from '@/components/ExportControls';
-import { AspectRatioSelector } from '@/components/AspectRatioSelector';
+const ImagePreview = lazy(() => import('@/components/UploadZone/ImagePreview').then((module) => ({ default: module.ImagePreview })));
+const VideoPreview = lazy(() => import('@/components/VideoPreview').then((module) => ({ default: module.VideoPreview })));
+const Timeline = lazy(() => import('@/components/Timeline/Timeline').then((module) => ({ default: module.Timeline })));
+const AudioUpload = lazy(() => import('@/components/AudioUpload').then((module) => ({ default: module.AudioUpload })));
+const ExportControls = lazy(() => import('@/components/ExportControls').then((module) => ({ default: module.ExportControls })));
+const AspectRatioSelector = lazy(() => import('@/components/AspectRatioSelector').then((module) => ({ default: module.AspectRatioSelector })));
+const ExportSettingsInfo = lazy(() => import('@/components/ExportSettingsInfo').then((module) => ({ default: module.ExportSettingsInfo })));
+const Footer = lazy(() => import('@/components/Footer').then((module) => ({ default: module.Footer })));
 import { Comment } from '@/components/Comment';
-import { Footer } from '@/components/Footer';
-import { ExportDebugPanel } from '@/components/ExportDebugPanel';
-import { ExportSettingsInfo } from '@/components/ExportSettingsInfo';
+const ExportDebugPanel = lazy(() => import('@/components/ExportDebugPanel').then((module) => ({ default: module.ExportDebugPanel })));
 import hiHatLogo from '@/assets/hi-hat-logo-transparent.png';
 
 function App() {
@@ -28,6 +26,12 @@ function App() {
     pageview(window.location.pathname);
   }, []);
 
+  const FallbackSection = () => (
+    <div className="bg-dark-surface border border-dark-border rounded-lg p-4 min-h-[140px] flex items-center justify-center">
+      <p className="text-text-secondary">Loading…</p>
+    </div>
+  )
+
   return (
     <div className="min-h-screen bg-dark-bg text-text-primary">
       <Comment text="========== APP HEADER ==========" />
@@ -35,7 +39,7 @@ function App() {
         <div className="inner-wrapper mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <img src={hiHatLogo} alt="Hi-hat Logo" className="w-12 h-12" />
+              <img src={hiHatLogo} alt="Hi-hat Logo" width={48} height={48} className="w-12 h-12" />
               <h1 className="text-2xl font-bold">Hi-hat Slideshow Video Generator</h1>
             </div>
             <button onClick={() => setShowHelp(!showHelp)} className="p-2 hover:bg-dark-border rounded transition-colors" title="Help">
@@ -86,14 +90,12 @@ function App() {
               <p className="text-text-primary font-medium mb-3">Share the app:</p>
               <div className="flex flex-wrap gap-3">
                 <a href={facebookShareUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-lg border border-dark-border bg-dark-bg px-4 py-2 text-text-primary hover:bg-dark-border transition-colors">
-                  <FontAwesomeIcon icon={faFacebookF} className="w-4 h-4" />
                   Facebook
                 </a>
                 <a href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-lg border border-dark-border bg-dark-bg px-4 py-2 text-text-primary hover:bg-dark-border transition-colors">
-                  <FontAwesomeIcon icon={faTwitter} className="w-4 h-4" />X
+                  X
                 </a>
                 <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-lg border border-dark-border bg-dark-bg px-4 py-2 text-text-primary hover:bg-dark-border transition-colors">
-                  <FontAwesomeIcon icon={faLinkedinIn} className="w-4 h-4" />
                   LinkedIn
                 </a>
               </div>
@@ -105,7 +107,9 @@ function App() {
       <Comment text="========== EXPORT SETTINGS INFO ==========" />
       <div className="bg-dark-bg">
         <div className="main-content mx-auto px-6 py-6">
-          <ExportSettingsInfo />
+          <Suspense fallback={<FallbackSection />}>
+            <ExportSettingsInfo />
+          </Suspense>
         </div>
       </div>
 
@@ -122,49 +126,65 @@ function App() {
 
             <Comment text="---- Image Preview Strip ----" />
             {true && (
-              <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
-                <ImagePreview />
-              </section>
+              <Suspense fallback={<FallbackSection />}>
+                <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
+                  <ImagePreview />
+                </section>
+              </Suspense>
             )}
 
             <Comment text="---- Aspect Ratio Selector ----" />
-            <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
-              <AspectRatioSelector />
-            </section>
+            <Suspense fallback={<FallbackSection />}>
+              <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
+                <AspectRatioSelector />
+              </section>
+            </Suspense>
 
             <Comment text="---- Audio Upload ----" />
-            <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
-              <AudioUpload />
-            </section>
+            <Suspense fallback={<FallbackSection />}>
+              <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
+                <AudioUpload />
+              </section>
+            </Suspense>
 
             <Comment text="---- Export Controls ----" />
-            <section className="hidden lg:block bg-dark-surface border border-dark-border rounded-lg p-4">
-              <ExportControls />
+            <section className="hidden lg:block">
+              <Suspense fallback={<FallbackSection />}>
+                <div className="bg-dark-surface border border-dark-border rounded-lg p-4">
+                  <ExportControls />
+                </div>
+              </Suspense>
             </section>
           </div>
 
           <Comment text="========== MIDDLE COLUMN: SLIDE SETTINGS ==========" />
           <div className="lg:col-span-1 flex flex-col gap-6">
-            <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
-              <h2 className="text-text-primary font-medium mb-3">Slide Settings</h2>
-              <Timeline />
-            </section>
+            <Suspense fallback={<FallbackSection />}>
+              <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
+                <h2 className="text-text-primary font-medium mb-3">Slide Settings</h2>
+                <Timeline />
+              </section>
+            </Suspense>
           </div>
 
           <Comment text="========== RIGHT COLUMN: VIDEO PREVIEW ==========" />
           <div className="lg:col-span-1">
             <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
               <h2 className="text-text-primary font-medium mb-3">Preview</h2>
-              <VideoPreview />
+              <Suspense fallback={<div className="w-full bg-dark-surface rounded-lg border border-dark-border p-8 flex items-center justify-center min-h-96"><p className="text-text-secondary">Loading preview…</p></div>}>
+                <VideoPreview />
+              </Suspense>
             </section>
           </div>
 
           <Comment text="========== MOBILE/TABLET BOTTOM: EXPORT CONTROLS ==========" />
           <div className="lg:hidden">
             <Comment text="---- Export Controls ----" />
-            <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
-              <ExportControls />
-            </section>
+            <Suspense fallback={<FallbackSection />}>
+              <section className="bg-dark-surface border border-dark-border rounded-lg p-4">
+                <ExportControls />
+              </section>
+            </Suspense>
           </div>
         </div>
       </main>
@@ -199,9 +219,13 @@ function App() {
       )}
 
       <Comment text="========== DEBUG PANEL ==========" />
-      <ExportDebugPanel />
+      <Suspense fallback={null}>
+        <ExportDebugPanel />
+      </Suspense>
 
-      <Footer />
+      <Suspense fallback={null}>
+        <Footer />
+      </Suspense>
     </div>
   );
 }

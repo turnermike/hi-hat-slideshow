@@ -10,15 +10,19 @@ export const Comment: React.FC<{ text: string }> = ({ text }) => {
 
   useEffect(() => {
     if (placeholderRef.current && placeholderRef.current.parentNode) {
-      // Create a comment node
-      const commentNode = document.createComment(` ${text} `);
-      // Insert the comment right before the placeholder div
-      placeholderRef.current.parentNode.insertBefore(commentNode, placeholderRef.current);
-      // Remove the placeholder div
-      placeholderRef.current.remove();
+      const parent = placeholderRef.current.parentNode;
+      const existingComment = Array.from(parent.childNodes).find(
+        (node) => node.nodeType === Node.COMMENT_NODE && node.textContent === ` ${text} `,
+      );
+
+      if (!existingComment) {
+        // Create a comment node and keep the placeholder div in place.
+        const commentNode = document.createComment(` ${text} `);
+        parent.insertBefore(commentNode, placeholderRef.current);
+      }
     }
   }, [text]);
 
-  // Return an empty div as a placeholder that gets replaced with the comment node
+  // Keep the placeholder div in the DOM so React's reconciliation remains stable.
   return <div ref={placeholderRef} style={{ display: 'none' }} suppressHydrationWarning />;
 };
