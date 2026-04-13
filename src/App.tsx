@@ -1,5 +1,5 @@
 import React from 'react';
-import { HelpCircle } from 'lucide-react';
+import { Facebook, HelpCircle, Linkedin, Share2, X } from 'lucide-react';
 import './App.css';
 import { UploadZone } from '@/components/UploadZone/UploadZone';
 import { ImagePreview } from '@/components/UploadZone/ImagePreview';
@@ -16,6 +16,8 @@ import hiHatLogo from '@/assets/hi-hat-logo-transparent.png';
 
 function App() {
   const [showHelp, setShowHelp] = React.useState(false);
+  const shareUrl = encodeURIComponent('https://hi-hat.consulting/');
+  const shareText = encodeURIComponent('Check out the Hi-hat Slideshow Video Generator — create polished slideshow videos fast.');
 
   //
   return (
@@ -67,7 +69,52 @@ function App() {
               <li>
                 <strong>Export your video.</strong> Choose the export quality and format, then download a share-ready slideshow video.
               </li>
+              <li>
+                <strong>Share on social media.</strong> Publish your finished slideshow to Facebook, X, LinkedIn, and other relevant platforms to showcase your visuals, engage your audience, and drive traffic to your brand.
+              </li>
             </ol>
+
+            <div className="mt-6 border-t border-dark-border pt-6">
+              <p className="text-text-primary font-medium mb-3">Share the app:</p>
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-lg border border-dark-border bg-dark-bg px-4 py-2 text-text-primary hover:bg-dark-border transition-colors"
+                >
+                  <Facebook className="w-4 h-4" />
+                  Facebook
+                </a>
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-lg border border-dark-border bg-dark-bg px-4 py-2 text-text-primary hover:bg-dark-border transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                  X
+                </a>
+                <a
+                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-lg border border-dark-border bg-dark-bg px-4 py-2 text-text-primary hover:bg-dark-border transition-colors"
+                >
+                  <Linkedin className="w-4 h-4" />
+                  LinkedIn
+                </a>
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-lg border border-dark-border bg-dark-bg px-4 py-2 text-text-primary hover:bg-dark-border transition-colors"
+                >
+                  <Share2 className="w-4 h-4" />
+                  More
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
