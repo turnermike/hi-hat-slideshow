@@ -138,6 +138,7 @@ export const VideoPreview: React.FC = () => {
             min={0}
             max={totalFrames}
             value={progress}
+            aria-label="Preview scrubber"
             onChange={(e) => {
               const newProgress = Number(e.target.value);
               setProgress(newProgress);

@@ -187,8 +187,9 @@ export const ExportControls: React.FC = () => {
       <div className="grid grid-cols-2 gap-3">
         {/* Resolution */}
         <div>
-          <label className="text-text-secondary text-xs block mb-1">Resolution</label>
+          <label htmlFor="export-resolution" className="text-text-secondary text-xs block mb-1">Resolution</label>
           <select
+            id="export-resolution"
             value={exportSettings.resolution}
             onChange={(e) => {
               const resolution = e.target.value as ExportSettings['resolution'];
@@ -211,8 +212,9 @@ export const ExportControls: React.FC = () => {
 
         {/* Format */}
         <div>
-          <label className="text-text-secondary text-xs block mb-1">Format</label>
+          <label htmlFor="export-format" className="text-text-secondary text-xs block mb-1">Format</label>
           <select
+            id="export-format"
             value={exportSettings.format}
             onChange={(e) => {
               const format = e.target.value as 'mp4' | 'webm';
@@ -236,8 +238,9 @@ export const ExportControls: React.FC = () => {
       <div className="grid grid-cols-2 gap-3">
         {/* Quality */}
         <div>
-          <label className="text-text-secondary text-xs block mb-1">Quality</label>
+          <label htmlFor="export-quality" className="text-text-secondary text-xs block mb-1">Quality</label>
           <select
+            id="export-quality"
             value={exportSettings.quality}
             onChange={(e) => {
               const quality = e.target.value as 'low' | 'medium' | 'high';
@@ -259,8 +262,9 @@ export const ExportControls: React.FC = () => {
 
         {/* FPS */}
         <div>
-          <label className="text-text-secondary text-xs block mb-1">Frame Rate</label>
+          <label htmlFor="export-fps" className="text-text-secondary text-xs block mb-1">Frame Rate</label>
           <select
+            id="export-fps"
             value={exportSettings.fps}
             onChange={(e) => {
               const fps = parseInt(e.target.value) as 24 | 30 | 60;

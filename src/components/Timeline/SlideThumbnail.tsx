@@ -58,8 +58,8 @@ export const SlideThumbnail: React.FC<SlideThumbnailProps> = ({ slideIndex, imag
           <div className="grid grid-cols-2 gap-2">
             {/* Transition dropdown */}
             <div>
-              <label className="text-text-secondary text-xs">Transition</label>
-              <select value={transitionType} onChange={(e) => updateTransition(slideIndex, e.target.value as TransitionType)} className="w-full bg-dark-border border border-dark-border rounded px-2 py-1 text-text-primary text-sm">
+              <label htmlFor={`transition-${slideIndex}`} className="text-text-secondary text-xs">Transition</label>
+              <select id={`transition-${slideIndex}`} value={transitionType} onChange={(e) => updateTransition(slideIndex, e.target.value as TransitionType)} className="w-full bg-dark-border border border-dark-border rounded px-2 py-1 text-text-primary text-sm">
                 {TRANSITIONS.map((t) => (
                   <option key={t} value={t}>
                     {t.charAt(0).toUpperCase() + t.slice(1)}
@@ -70,32 +70,35 @@ export const SlideThumbnail: React.FC<SlideThumbnailProps> = ({ slideIndex, imag
 
             {/* Slide duration */}
             <div>
-              <label className="text-text-secondary text-xs">Duration: {slideDuration}s</label>
-              <input type="range" min="1" max="10" step="0.1" value={slideDuration} onChange={(e) => updateSlideDuration(slideIndex, parseFloat(e.target.value))} className="w-full h-1 bg-dark-border rounded-lg appearance-none cursor-pointer accent-primary" />
+              <label htmlFor={`slide-duration-${slideIndex}`} className="text-text-secondary text-xs">Duration: {slideDuration}s</label>
+              <input id={`slide-duration-${slideIndex}`} type="range" min="1" max="10" step="0.1" value={slideDuration} onChange={(e) => updateSlideDuration(slideIndex, parseFloat(e.target.value))} className="w-full h-1 bg-dark-border rounded-lg appearance-none cursor-pointer accent-primary" aria-valuemin={1} aria-valuemax={10} />
             </div>
           </div>
 
           {/* Caption input */}
           <div>
-            <label className="text-text-secondary text-xs">Caption (optional)</label>
-            <input type="text" value={caption} onChange={(e) => updateCaption(slideIndex, e.target.value)} placeholder="Add text overlay..." className="w-full bg-dark-border border border-dark-border rounded px-2 py-1 text-text-primary text-sm placeholder-text-secondary" />
+            <label htmlFor={`caption-${slideIndex}`} className="text-text-secondary text-xs">Caption (optional)</label>
+            <input id={`caption-${slideIndex}`} type="text" value={caption} onChange={(e) => updateCaption(slideIndex, e.target.value)} placeholder="Add text overlay..." className="w-full bg-dark-border border border-dark-border rounded px-2 py-1 text-text-primary text-sm placeholder-text-secondary" />
           </div>
 
           {/* Caption color picker */}
           <div>
-            <label className="text-text-secondary text-xs">Caption Color</label>
+            <label htmlFor={`caption-color-${slideIndex}`} className="text-text-secondary text-xs">Caption Color</label>
             <div className="flex items-center gap-2">
               <input 
+                id={`caption-color-${slideIndex}`} 
                 type="color" 
                 value={captionColor} 
                 onChange={(e) => updateCaptionColor(slideIndex, e.target.value)}
                 className="w-8 h-8 bg-dark-border border border-dark-border rounded cursor-pointer"
               />
               <input 
+                id={`caption-color-text-${slideIndex}`} 
                 type="text" 
                 value={captionColor} 
                 onChange={(e) => updateCaptionColor(slideIndex, e.target.value)}
                 placeholder="#ffffff"
+                aria-label="Caption color hex code"
                 className="flex-1 bg-dark-border border border-dark-border rounded px-2 py-1 text-text-primary text-sm placeholder-text-secondary font-mono"
               />
             </div>
@@ -104,8 +107,8 @@ export const SlideThumbnail: React.FC<SlideThumbnailProps> = ({ slideIndex, imag
           {/* Advanced controls */}
           {showAdvanced && transitionType !== 'kenburns' && (
             <div className="pt-2 border-t border-dark-border">
-              <label className="text-text-secondary text-xs">Transition Duration: {transitionDuration.toFixed(1)}s</label>
-              <input type="range" min="0.5" max="2" step="0.1" value={transitionDuration} onChange={(e) => updateTransitionDuration(slideIndex, parseFloat(e.target.value))} className="w-full h-1 bg-dark-border rounded-lg appearance-none cursor-pointer accent-secondary" />
+              <label htmlFor={`transition-duration-${slideIndex}`} className="text-text-secondary text-xs">Transition Duration: {transitionDuration.toFixed(1)}s</label>
+              <input id={`transition-duration-${slideIndex}`} type="range" min="0.5" max="2" step="0.1" value={transitionDuration} onChange={(e) => updateTransitionDuration(slideIndex, parseFloat(e.target.value))} className="w-full h-1 bg-dark-border rounded-lg appearance-none cursor-pointer accent-secondary" aria-valuemin={0.5} aria-valuemax={2} />
             </div>
           )}
 
