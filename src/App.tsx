@@ -1,5 +1,7 @@
 import React from 'react';
-import { Globe, HelpCircle, Link, Share2, X } from 'lucide-react';
+import { HelpCircle } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebookF, faLinkedinIn, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import './App.css';
 import { UploadZone } from '@/components/UploadZone/UploadZone';
 import { ImagePreview } from '@/components/UploadZone/ImagePreview';
@@ -77,41 +79,16 @@ function App() {
             <div className="mt-6 border-t border-dark-border pt-6">
               <p className="text-text-primary font-medium mb-3">Share the app:</p>
               <div className="flex flex-wrap gap-3">
-                <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-lg border border-dark-border bg-dark-bg px-4 py-2 text-text-primary hover:bg-dark-border transition-colors"
-                >
-                  <Globe className="w-4 h-4" />
+                <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-lg border border-dark-border bg-dark-bg px-4 py-2 text-text-primary hover:bg-dark-border transition-colors">
+                  <FontAwesomeIcon icon={faFacebookF} className="w-4 h-4" />
                   Facebook
                 </a>
-                <a
-                  href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-lg border border-dark-border bg-dark-bg px-4 py-2 text-text-primary hover:bg-dark-border transition-colors"
-                >
-                  <X className="w-4 h-4" />
-                  X
+                <a href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-lg border border-dark-border bg-dark-bg px-4 py-2 text-text-primary hover:bg-dark-border transition-colors">
+                  <FontAwesomeIcon icon={faTwitter} className="w-4 h-4" />X
                 </a>
-                <a
-                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-lg border border-dark-border bg-dark-bg px-4 py-2 text-text-primary hover:bg-dark-border transition-colors"
-                >
-                  <Link className="w-4 h-4" />
+                <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-lg border border-dark-border bg-dark-bg px-4 py-2 text-text-primary hover:bg-dark-border transition-colors">
+                  <FontAwesomeIcon icon={faLinkedinIn} className="w-4 h-4" />
                   LinkedIn
-                </a>
-                <a
-                  href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-lg border border-dark-border bg-dark-bg px-4 py-2 text-text-primary hover:bg-dark-border transition-colors"
-                >
-                  <Share2 className="w-4 h-4" />
-                  More
                 </a>
               </div>
             </div>
