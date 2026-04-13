@@ -2,6 +2,14 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
+const cssPreloadPlugin = () => ({
+  name: 'css-preload',
+  enforce: 'post' as const,
+  transformIndexHtml(html: string) {
+    return html.replace(/<link rel="stylesheet"(?: crossorigin)? href="([^"]+\.css)">/g, (_, href) => `<link rel="preload" href="${href}" as="style" onload="this.onload=null;this.rel='stylesheet'">\n    <noscript><link rel="stylesheet" href="${href}"></noscript>`);
+  },
+});
+
 // Local API plugin for development
 const exportApiPlugin = () => {
   const registerRoute = (middlewares: any) => {
@@ -21,7 +29,7 @@ const exportApiPlugin = () => {
 
         const rawBody = Buffer.concat(chunks).toString('utf-8');
         const payload = JSON.parse(rawBody);
-        
+
         // Dynamic import for server-side functionality
         const { renderProjectVideo } = await import('./src/server/exportVideo');
         const result = await renderProjectVideo(payload);
@@ -54,8 +62,9 @@ const exportApiPlugin = () => {
 export default defineConfig({
   plugins: [
     react(),
+    cssPreloadPlugin(),
     // Only include local API in development
-    process.env.NODE_ENV !== 'production' ? exportApiPlugin() : null
+    process.env.NODE_ENV !== 'production' ? exportApiPlugin() : null,
   ].filter(Boolean),
   resolve: {
     alias: {
@@ -64,7 +73,7 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      external: ['@ffmpeg-installer/ffmpeg', '@remotion/bundler', '@remotion/renderer']
-    }
+      external: ['@ffmpeg-installer/ffmpeg', '@remotion/bundler', '@remotion/renderer'],
+    },
   },
 });
