@@ -1,5 +1,5 @@
 import React from 'react';
-import { Facebook, HelpCircle, Linkedin, Share2, X } from 'lucide-react';
+import { Globe, HelpCircle, Link, Share2, X } from 'lucide-react';
 import './App.css';
 import { UploadZone } from '@/components/UploadZone/UploadZone';
 import { ImagePreview } from '@/components/UploadZone/ImagePreview';
@@ -83,7 +83,7 @@ function App() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-lg border border-dark-border bg-dark-bg px-4 py-2 text-text-primary hover:bg-dark-border transition-colors"
                 >
-                  <Facebook className="w-4 h-4" />
+                  <Globe className="w-4 h-4" />
                   Facebook
                 </a>
                 <a
@@ -101,7 +101,7 @@ function App() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-lg border border-dark-border bg-dark-bg px-4 py-2 text-text-primary hover:bg-dark-border transition-colors"
                 >
-                  <Linkedin className="w-4 h-4" />
+                  <Link className="w-4 h-4" />
                   LinkedIn
                 </a>
                 <a
