@@ -1,5 +1,6 @@
 import React from 'react';
-import hiHatLogo from '@/assets/hi-hat-logo-transparent.png';
+import hiHatLogo32 from '@/assets/hi-hat-logo-transparent-32.png';
+import hiHatLogo64 from '@/assets/hi-hat-logo-transparent-64.png';
 
 export const Footer: React.FC = () => {
   return (
@@ -8,8 +9,13 @@ export const Footer: React.FC = () => {
         <a href="/" className="flex items-center gap-3 group cursor-pointer mb-12">
           <div className="relative h-10 w-10 overflow-hidden transition-transform duration-500 group-hover:rotate-3 group-hover:scale-105 flex items-center justify-center">
             <img 
-              src={hiHatLogo} 
+              src={hiHatLogo32} 
+              srcSet={`${hiHatLogo32} 1x, ${hiHatLogo64} 2x`} 
+              sizes="40px"
               alt="Hi-hat Consulting logo" 
+              width={40}
+              height={40}
+              decoding="async"
               className="w-full h-full object-contain p-1.5"
             />
           </div>
