@@ -84,31 +84,40 @@ The terminal will show:
   ➜  press h + enter to show help
 ```
 
-## 🧪 Testing
+##  Testing
 
-Run comprehensive test suite:
+This project includes a comprehensive automated testing suite for video export functionality. For detailed testing instructions, including setup, running tests, and writing new tests, see the **[TESTING.md](./TESTING.md)** file.
+
+### Quick Test Commands
 
 ```bash
+# Run all tests in watch mode (development)
 npm run test
+
+# Run all tests once
+npm run test:run
+
+# Run tests with coverage report
+npm run test:coverage
+
+# Run tests with UI interface
+npm run test:ui
 ```
 
-To run tests in watch mode (re-run on file changes):
+### Test Coverage Areas
 
-```bash
-npm run test -- --watch
-```
-
-To run a specific test file:
-
-```bash
-npm run test -- src/utils/transitions.test.ts --run
-```
+- **Unit Tests**: Utility functions for video export calculations
+- **Integration Tests**: Complete video export flow with different formats
+- **API Tests**: HTTP endpoint validation and error handling
+- **Mock Tests**: Remotion rendering functionality without actual video generation
 
 **Current Test Coverage:**
+- 100+ tests covering video export functionality
+- Fast execution with comprehensive mocking
+- Tests for MP4 and WebM export formats
+- Error handling and edge case validation
 
-- 87 tests passing
-- 1 test skipped (browser API limitation)
-- Covers: frame calculations, export settings, file validation, state management
+> **Note**: For complete testing setup, debugging guides, and best practices, refer to the **[TESTING.md](./TESTING.md)** documentation.
 
 ## 🏗️ Building for Production
 
@@ -132,24 +141,39 @@ npm run preview
 
 ```
 src/
-├── components/          # React components
-│   ├── UploadZone/      # Image upload interface
-│   ├── Timeline/        # Slide timeline and controls
-│   ├── Transitions/     # Transition components
-│   ├── VideoPreview.tsx # Video preview component
-│   ├── ExportControls.tsx # Export settings and button
-│   ├── AspectRatioSelector.tsx # Aspect ratio selection
-│   ├── AudioUpload.tsx  # Audio upload component
-│   └── Comment.tsx      # Development comments
-├── remotion/            # Remotion video composition
-│   ├── Root.tsx         # Main video composition
-│   └── index.ts         # Remotion exports
-├── hooks/               # Custom React hooks
-├── assets/              # Static assets (images, logos)
-├── App.tsx              # Main app component
-├── main.tsx             # App entry point
-├── App.css              # App styles
-└── index.css            # Global styles
+  components/          # React components
+  UploadZone/      # Image upload interface
+  Timeline/        # Slide timeline and controls
+  Transitions/     # Transition components
+  VideoPreview.tsx # Video preview component
+  ExportControls.tsx # Export settings and button
+  AspectRatioSelector.tsx # Aspect ratio selection
+  AudioUpload.tsx  # Audio upload component
+  Comment.tsx      # Development comments
+  remotion/            # Remotion video composition
+  Root.tsx         # Main video composition
+  index.ts         # Remotion exports
+  server/              # Server-side video export functionality
+  exportVideo.ts   # Main video export function
+  hooks/               # Custom React hooks
+  stores/              # State management with Zustand
+  types/               # TypeScript type definitions
+  utils/               # Utility functions and helpers
+  assets/              # Static assets (images, logos)
+  __tests__/           # Automated test suite
+  api/                 # API endpoint tests
+  server/              # Server function tests
+  utils/               # Test utilities and helpers
+  mocks/               # Mock configurations
+  setup.ts            # Global test setup
+  App.tsx              # Main app component
+  main.tsx             # App entry point
+  App.css              # App styles
+  index.css            # Global styles
+api/
+  export/              # Video export API endpoints
+  route.ts            # Main export API handler
+TESTING.md            # Comprehensive testing documentation
 ```
 
 ## 📖 How to Use
@@ -167,13 +191,16 @@ src/
 
 ## 📜 Available Scripts
 
-| Command           | Purpose                                |
-| ----------------- | -------------------------------------- |
-| `npm run dev`     | Start development server               |
-| `npm run build`   | Create production build                |
-| `npm run preview` | Preview production build locally       |
-| `npm run test`    | Run test suite                         |
-| `npm run lint`    | Check code for errors and style issues |
+| Command                | Purpose                                |
+| ---------------------- | -------------------------------------- |
+| `npm run dev`          | Start development server               |
+| `npm run build`        | Create production build                |
+| `npm run preview`      | Preview production build locally       |
+| `npm run test`         | Run test suite in watch mode           |
+| `npm run test:run`     | Run all tests once                     |
+| `npm run test:coverage`| Run tests with coverage report         |
+| `npm run test:ui`      | Run tests with UI interface            |
+| `npm run lint`         | Check code for errors and style issues |
 
 ## 🌐 Browser Support
 

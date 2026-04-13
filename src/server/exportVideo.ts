@@ -41,7 +41,7 @@ const QUALITY_BITRATE_MAP = {
   },
 } as const;
 
-const getCodecInfo = (format: 'mp4' | 'webm') => {
+export const getCodecInfo = (format: 'mp4' | 'webm') => {
   if (format === 'webm') {
     return {
       codec: 'vp9',
@@ -57,9 +57,9 @@ const getCodecInfo = (format: 'mp4' | 'webm') => {
   } as const;
 };
 
-const getBitrate = (settings: ExportSettings) => QUALITY_BITRATE_MAP[settings.quality][settings.format];
+export const getBitrate = (settings: ExportSettings) => QUALITY_BITRATE_MAP[settings.quality][settings.format];
 
-const calculateTotalFrames = (slideDurations: number[], transitionDurations: number[], fps: number): number => {
+export const calculateTotalFrames = (slideDurations: number[], transitionDurations: number[], fps: number): number => {
   const slidesFrames = slideDurations.reduce((sum, duration) => sum + Math.round(duration * fps), 0);
   const transitionsFrames = transitionDurations.reduce((sum, duration) => sum + Math.round(duration * fps), 0);
   return slidesFrames + transitionsFrames;
@@ -79,7 +79,7 @@ const getCompositorPackageName = () => {
   return null;
 };
 
-const ensureCompatibleBinariesDirectory = async () => {
+export const ensureCompatibleBinariesDirectory = async () => {
   if (compatBinariesDirectory) return compatBinariesDirectory;
 
   const require = createRequire(import.meta.url);
@@ -113,7 +113,7 @@ const ensureCompatibleBinariesDirectory = async () => {
   }
 };
 
-const getResolution = (project: ExportPayload['project']) => {
+export const getResolution = (project: ExportPayload['project']) => {
   const { resolution, customWidth, customHeight } = project.exportSettings;
   const base = resolution === 'custom' ? { width: customWidth ?? 1920, height: customHeight ?? 1080 } : RESOLUTION_MAP[resolution] ?? RESOLUTION_MAP['1080p'];
 

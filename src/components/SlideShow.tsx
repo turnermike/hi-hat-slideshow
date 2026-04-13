@@ -54,11 +54,11 @@ const TransitionWrapper: React.FC<{
   }
 };
 
-const ImageSlide: React.FC<{ url: string; applyKenBurns: boolean; slideProgress: number }> = ({ url, applyKenBurns, slideProgress }) => {
+const ImageSlide: React.FC<{ url: string; applyKenBurns: boolean; slideProgress: number; index: number }> = ({ url, applyKenBurns, slideProgress, index }) => {
   const KBContent = (
     <img
       src={url}
-      alt="Slide"
+      alt={`Slideshow image ${index + 1}`}
       style={{
         width: '100%',
         height: '100%',
@@ -149,14 +149,7 @@ export const SlideShow: React.FC<SlideShowProps> = ({ project }) => {
       const fromImage = safeProject.images[currentTransition.imageIndex];
       const toImage = safeProject.images[currentTransition.nextImageIndex];
 
-      return (
-        <TransitionWrapper
-          type={safeProject.transitions[currentTransition.imageIndex] || 'fade'}
-          progress={transitionProgress}
-          from={<ImageSlide url={fromImage.url} applyKenBurns={hasKenBurns(currentTransition.imageIndex)} slideProgress={1} />}
-          to={<ImageSlide url={toImage.url} applyKenBurns={hasKenBurns(currentTransition.nextImageIndex)} slideProgress={0} />}
-        />
-      );
+      return <TransitionWrapper type={safeProject.transitions[currentTransition.imageIndex] || 'fade'} progress={transitionProgress} from={<ImageSlide url={fromImage.url} applyKenBurns={hasKenBurns(currentTransition.imageIndex)} slideProgress={1} index={currentTransition.imageIndex} />} to={<ImageSlide url={toImage.url} applyKenBurns={hasKenBurns(currentTransition.nextImageIndex)} slideProgress={0} index={currentTransition.nextImageIndex} />} />;
     }
 
     // During slide
@@ -164,7 +157,7 @@ export const SlideShow: React.FC<SlideShowProps> = ({ project }) => {
       const slideProgress = (frame - currentSlide.startFrame) / (currentSlide.endFrame - currentSlide.startFrame);
       const image = safeProject.images[currentSlide.imageIndex];
 
-      return <ImageSlide url={image.url} applyKenBurns={hasKenBurns(currentSlide.imageIndex)} slideProgress={slideProgress} />;
+      return <ImageSlide url={image.url} applyKenBurns={hasKenBurns(currentSlide.imageIndex)} slideProgress={slideProgress} index={currentSlide.imageIndex} />;
     }
 
     // Fallback

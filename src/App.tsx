@@ -32,17 +32,18 @@ function App() {
               <HelpCircle className="w-6 h-6 text-text-secondary" />
             </button>
           </div>
+          <p className="text-text-secondary text-left pb-4">Easily create customized slideshow videos by uploading images, adding captions, and choosing from six dynamic transitions. Adjust slide durations, select from three design templates, and upload background music to enhance your video. With support for multiple aspect ratios and export options in up to 4K resolution, you can preview your slideshow in real-time before downloading.</p>
           <p className="text-text-secondary text-left pb-4">
-            Easily create customized slideshow videos by uploading images, adding captions, and choosing from six dynamic transitions. Adjust slide durations, select from three design templates, and upload background music to enhance your video. With support for multiple aspect ratios and export options in up to 4K resolution, you can preview your slideshow in real-time before downloading.
-          </p>
-          <p className="text-text-secondary text-left pb-4">
-            Brought to you by: <a href="https://hi-hat.consulting" target="_blank" rel="noopener noreferrer" className="text-text-primary hover:text-text-secondary transition-colors">Hi-hat Consulting - www.hi-hatconsulting.com</a>
+            Brought to you by:{' '}
+            <a href="https://hi-hat.consulting" target="_blank" rel="noopener noreferrer" className="text-text-primary hover:text-text-secondary transition-colors">
+              Hi-hat Consulting - www.hi-hatconsulting.com
+            </a>
           </p>
         </div>
       </header>
 
       <Comment text="========== MAIN CONTENT ==========" />
-      <div className="main-content max-w-screen-2xl mx-auto px-6 py-6">
+      <main className="main-content max-w-screen-2xl mx-auto px-6 py-6" aria-label="Slideshow editor">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <Comment text="========== LEFT SIDEBAR: UPLOAD AND CONTROLS ==========" />
           <div className="lg:col-span-1 flex flex-col gap-6">
@@ -99,7 +100,7 @@ function App() {
             </section>
           </div>
         </div>
-      </div>
+      </main>
 
       <Comment text="========== HELP MODAL ==========" />
       {showHelp && (
@@ -129,15 +130,15 @@ function App() {
           </div>
         </div>
       )}
-      
+
       <Comment text="========== EXPORT SETTINGS INFO ==========" />
       <div className="main-content mx-auto px-6 py-6">
         <ExportSettingsInfo />
       </div>
-      
+
       <Comment text="========== DEBUG PANEL ==========" />
       <ExportDebugPanel />
-      
+
       <Footer />
     </div>
   );
