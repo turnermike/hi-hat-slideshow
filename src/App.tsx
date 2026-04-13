@@ -32,7 +32,7 @@ function App() {
               <HelpCircle className="w-6 h-6 text-text-secondary" />
             </button>
           </div>
-          <p className="text-text-secondary text-left pb-4">Easily create customized slideshow videos by uploading images, adding captions, and choosing from six dynamic transitions. Adjust slide durations, select from three design templates, and upload background music to enhance your video. With support for multiple aspect ratios and export options in up to 4K resolution, you can preview your slideshow in real-time before downloading.</p>
+          <p className="text-text-secondary text-left pb-4">Create polished slideshow videos from your images with an intuitive editor built for fast results. Upload photos, layer captions, pick from six animated transitions, add background music, and export in multiple resolutions including 4K. Preview your slideshow instantly, choose the right aspect ratio, and get a finished video that’s ready to share.</p>
           <p className="text-text-secondary text-left pb-4">
             Brought to you by:{' '}
             <a href="https://hi-hat.consulting" target="_blank" rel="noopener noreferrer" className="text-text-primary hover:text-text-secondary transition-colors">
@@ -41,6 +41,43 @@ function App() {
           </p>
         </div>
       </header>
+
+      <Comment text="========== INSTRUCTIONS PANEL ==========" />
+      <div className="bg-dark-bg">
+        <div className="main-content mx-auto px-6 py-6">
+          <div className="bg-dark-surface border border-dark-border rounded-lg p-6 mx-auto text-left">
+            <h2 className="text-text-primary font-bold text-xl mb-4">How to Use the Slideshow Video Generator</h2>
+            <p className="text-text-secondary mb-4">Follow these simple steps to build a polished slideshow video with image uploads, music, transitions, and export settings optimized for sharing.</p>
+            <ol className="space-y-4 list-decimal list-inside text-text-secondary">
+              <li>
+                <strong>Upload your images.</strong> Add high-quality photos in PNG, JPG, or WEBP format and reorder them to define the slideshow flow.
+              </li>
+              <li>
+                <strong>Customize each slide.</strong> Add captions, choose transitions, and adjust slide duration for a compelling visual story.
+              </li>
+              <li>
+                <strong>Set the aspect ratio.</strong> Pick the best format for your target platform, such as square, widescreen, or portrait.
+              </li>
+              <li>
+                <strong>Upload music.</strong> Add background audio in MP3, WAV, or OGG to make your slideshow more engaging.
+              </li>
+              <li>
+                <strong>Review the preview.</strong> Use the real-time preview to validate animation, timing, and pacing before export.
+              </li>
+              <li>
+                <strong>Export your video.</strong> Choose the export quality and format, then download a share-ready slideshow video.
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <Comment text="========== EXPORT SETTINGS INFO ==========" />
+      <div className="bg-dark-bg">
+        <div className="main-content mx-auto px-6 py-6">
+          <ExportSettingsInfo />
+        </div>
+      </div>
 
       <Comment text="========== MAIN CONTENT ==========" />
       <main className="main-content max-w-screen-2xl mx-auto px-6 py-6" aria-label="Slideshow editor">
@@ -130,11 +167,6 @@ function App() {
           </div>
         </div>
       )}
-
-      <Comment text="========== EXPORT SETTINGS INFO ==========" />
-      <div className="main-content mx-auto px-6 py-6">
-        <ExportSettingsInfo />
-      </div>
 
       <Comment text="========== DEBUG PANEL ==========" />
       <ExportDebugPanel />
