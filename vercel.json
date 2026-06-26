@@ -12,7 +12,8 @@
   },
   "build": {
     "env": {
-      "NODE_ENV": "production"
+      "NODE_ENV": "production",
+      "VITE_GA_MEASUREMENT_ID": "G-2E27PLM3ZS"
     }
   }
 }

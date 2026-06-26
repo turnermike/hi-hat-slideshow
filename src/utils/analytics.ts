@@ -3,8 +3,17 @@ const GA_SCRIPT_ID = 'google-analytics-script'
 let gtagInitialized = false
 
 function initializeGtag() {
-  if (typeof window === 'undefined' || !GA_MEASUREMENT_ID || gtagInitialized) return
+  if (typeof window === 'undefined') return
+  if (!GA_MEASUREMENT_ID) {
+    console.warn('[GA] VITE_GA_MEASUREMENT_ID is not set. Google Analytics will not initialize.')
+    return
+  }
+  if (gtagInitialized) {
+    console.log('[GA] initializeGtag skipped; already initialized.')
+    return
+  }
 
+  console.log('[GA] initializeGtag starting with measurement ID:', GA_MEASUREMENT_ID)
   window.dataLayer = window.dataLayer || []
   window.gtag = function (...args: unknown[]) {
     window.dataLayer?.push(args)
@@ -14,6 +23,8 @@ function initializeGtag() {
   script.id = GA_SCRIPT_ID
   script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`
   script.async = true
+  script.onload = () => console.log('[GA] gtag script loaded successfully.')
+  script.onerror = () => console.warn('[GA] Failed to load gtag script from Google Analytics.')
   document.head.appendChild(script)
 
   window.gtag('js', new Date())
@@ -21,9 +32,17 @@ function initializeGtag() {
 }
 
 export function pageview(page_path: string) {
-  if (!GA_MEASUREMENT_ID || typeof window === 'undefined') return
+  if (typeof window === 'undefined') return
+  console.log('[GA] pageview called with path:', page_path)
+  if (!GA_MEASUREMENT_ID) {
+    console.warn('[GA] pageview skipped because VITE_GA_MEASUREMENT_ID is missing.')
+    return
+  }
   initializeGtag()
-  if (typeof window.gtag !== 'function') return
+  if (typeof window.gtag !== 'function') {
+    console.warn('[GA] pageview skipped because gtag is not initialized.')
+    return
+  }
   window.gtag('config', GA_MEASUREMENT_ID, {
     page_path,
   })

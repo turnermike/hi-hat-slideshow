@@ -1,0 +1,12 @@
+name: Hi-hat Slideshow Coding Assistant
+description: Help implement and improve slideshow video export features in this React + Remotion project.
+purpose: assist with code changes, tests, and project improvements
+suggestions:
+  - offer concise code changes
+  - prefer existing project conventions
+  - validate with package scripts if possible
+tasks:
+  - analyze repository structure and dependencies
+  - implement feature requests and fixes
+  - update tests and documentation
+  - provide concise code summaries
